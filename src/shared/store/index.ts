@@ -1,7 +1,8 @@
-import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
+import NDK, { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-type State = {
+type AppState = {
   isLoginModalOpen: boolean;
 
   isZapModalOpen: boolean;
@@ -9,7 +10,7 @@ type State = {
   zapTarget: NDKEvent | NDKUser | undefined;
 };
 
-type Actions = {
+type AppActions = {
   setIsLoginModalOpen: (isOpen: boolean) => void;
 
   setIsZapModalOpen: (isOpen: boolean) => void;
@@ -17,16 +18,113 @@ type Actions = {
   setZapTarget: (target: NDKEvent | NDKUser | undefined) => void;
 };
 
-export const useStore = create<State & Actions>((set) => ({
-  isLoginModalOpen: false,
+type GlobalNDKState = {
+  globalNDK: NDK;
+};
 
-  isZapModalOpen: false,
+type GlobalNDKActions = {
+  setGlobalNDK: (globalNDK: NDK) => void;
+};
 
-  zapTarget: undefined,
+type ModerationState = {
+  activeRelayUrl: string | undefined;
+  activeGroupId: string | undefined;
+  activeUserPub: string | undefined;
+};
 
-  setIsLoginModalOpen: (isOpen) => set({ isLoginModalOpen: isOpen }),
+type ModerationActions = {
+  setActiveRelayUrl: (activeRelayUrl: string | undefined) => void;
+  setActiveGroupId: (activeGroupId: string | undefined) => void;
+  setActiveUserPub: (activeUserPub: string | undefined) => void;
+};
 
-  setIsZapModalOpen: (isOpen) => set({ isZapModalOpen: isOpen }),
+type RelaysState = {
+  relays: string[];
+  activeRelayUrl: string | undefined;
+};
 
-  setZapTarget: (target) => set({ zapTarget: target }),
-}));
+type RelaysActions = {
+  addRelay: (relay: string) => void;
+  safeRemoveRelay: (relay: string) => void;
+  setActiveRelayUrl: (activeRelayUrl: string) => void;
+};
+
+export const useStore = create<
+  AppState &
+    AppActions &
+    GlobalNDKState &
+    GlobalNDKActions &
+    ModerationState &
+    ModerationActions &
+    RelaysState &
+    RelaysActions
+>()(
+  persist(
+    (set, get) => ({
+      // App State
+
+      isLoginModalOpen: false,
+
+      isZapModalOpen: false,
+
+      zapTarget: undefined,
+
+      setIsLoginModalOpen: (isOpen) => set({ isLoginModalOpen: isOpen }),
+
+      setIsZapModalOpen: (isOpen) => set({ isZapModalOpen: isOpen }),
+
+      setZapTarget: (target) => set({ zapTarget: target }),
+
+      // Global NDK State
+
+      globalNDK: new NDK({
+        explicitRelayUrls: ['wss://nos.lol'],
+        autoConnectUserRelays: false,
+        autoFetchUserMutelist: false,
+      }),
+
+      setGlobalNDK: (globalNDK) => set({ globalNDK }),
+
+      // moderation State
+
+      activeGroupId: undefined,
+      activeRelayUrl: undefined,
+      activeUserPub: undefined,
+
+      setActiveGroupId: (activeGroupId) => set({ activeGroupId }),
+      setActiveRelayUrl: (activeRelayUrl) => set({ activeRelayUrl }),
+      setActiveUserPub: (activeUserPub) => set({ activeUserPub }),
+
+      // Relay State
+
+      relays: ['wss://groups.fiatjaf.com', 'wss://relay.groups.nip29.com'],
+
+      addRelay: (relay) => {
+        const { relays } = get();
+
+        if (!relays.includes(relay)) {
+          set({ relays: [...relays, relay] });
+        }
+      },
+      safeRemoveRelay: (relay) => {
+        const { relays } = get();
+
+        if (relays.length === 1) {
+          return;
+        }
+
+        set({
+          relays: relays.filter((r) => r !== relay),
+        });
+      },
+    }),
+    {
+      name: 'app-storage',
+      partialize: (state) => ({
+        relays: [
+          ...new Set(['wss://relay.groups.nip29.com', 'wss://groups.fiatjaf.com', ...state.relays]),
+        ],
+      }),
+    },
+  ),
+);

@@ -15,8 +15,6 @@ import { Small } from '@/shared/components/ui/typography/small';
 import { ZAP_AMOUNTS } from './config';
 import { useZapModal } from './hooks';
 
-// Check out the `example-components` folder to see how to use this component
-
 export const ZapModal = () => {
   const {
     comment,
