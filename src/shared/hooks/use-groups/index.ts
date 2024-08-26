@@ -3,10 +3,13 @@ import { useMemo } from 'react';
 
 import { Group } from '@/shared/types';
 
-const filters = [{ kinds: [39000], limit: 1000 }];
+const filters = {
+  filters: [{ kinds: [39000], limit: 100 }],
+  relays: ['wss://relay.groups.nip29.com'],
+};
 
 export const useGroups = () => {
-  const { events: groupsEvents } = useSubscribe( { filters });
+  const { events: groupsEvents } = useSubscribe(filters);
 
   const groups = useMemo(
     () =>
