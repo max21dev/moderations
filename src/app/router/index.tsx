@@ -148,7 +148,7 @@ export const router = createBrowserRouter([
                     },
                   },
                   {
-                    path: ':group',
+                    path: ':groupId',
                     async lazy() {
                       return { Component: (await GroupPage()).GroupPage };
                     },

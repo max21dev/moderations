@@ -9,10 +9,8 @@ export const RelaysList = () => {
   const navigate = useNavigate();
 
   const handleRelayClick = (relay: string) => {
-    //remove all ws:// and wss:// from beginning of the url
-    relay = relay.replace(/^(wss?:\/\/)/, '');
     setActiveRelayUrl(relay);
-    navigate(`/relays/${relay}`); // Navigate to the proper page
+    navigate(`/relays/${encodeURIComponent(relay)}/groups/`); // Navigate to the proper page
   };
 
   return (

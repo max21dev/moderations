@@ -5,7 +5,7 @@ import { GroupsList } from '@/features/groups';
 export const GroupsPage = () => {
   return (
     <div>
-      <h1>Groups Page</h1>
+      <h5>Groups Page</h5>
 
       <GroupsList />
 

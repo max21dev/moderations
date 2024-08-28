@@ -96,9 +96,11 @@ export const columns: ColumnDef<Group>[] = [
     cell: ({ row }) => {
       const navigate = useNavigate();
       const location = useLocation();
+      const currentPath = location.pathname;
+      const newId = row.getValue('id');
 
       const handleNavigation = () => {
-        const newPath = `${location.pathname}${row.getValue('id')}`;
+        const newPath = currentPath.replace(/(\/groups\/).*/, `/groups/${newId}`);
         navigate(newPath);
       };
 
