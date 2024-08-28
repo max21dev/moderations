@@ -2,46 +2,34 @@ import NDK from '@nostr-dev-kit/ndk';
 import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
 import { useAutoLogin, useNostrHooks } from 'nostr-hooks';
 import { useEffect, useMemo } from 'react';
-import { RouterProvider } from 'react-router-dom';
-
-import { UserLoginModal } from '@/features/users';
-
-import { ThemeProvider } from '@/shared/components/theme-provider';
-import { Toaster } from '@/shared/components/ui/toaster';
-import { ZapModal } from '@/shared/components/zap-modal';
+import { Outlet, useParams } from 'react-router-dom';
 
 import { useGlobalNdk } from '@/shared/hooks';
-import { useStore } from '@/shared/store';
 
 import './index.css';
-import { router } from './router';
 
 export const App = () => {
-  const relays = useStore((state) => state.relays);
-  console.log('relays', relays);
-  const activeRelayUrl = useStore((state) => state.activeRelayUrl);
-  console.log('activeRelayUrl', activeRelayUrl);
+  const { relay } = useParams();
 
   const ndk = useMemo(
     () =>
       new NDK({
-        explicitRelayUrls: [
-          relays[0],
-          // !activeRelayUrl ? relays[0] : relays.find((relay) => relay.includes(activeRelayUrl)),
-        ],
+        explicitRelayUrls: relay ? [relay] : undefined,
         autoConnectUserRelays: false,
         autoFetchUserMutelist: false,
-        cacheAdapter: new NDKCacheAdapterDexie({
-          dbName: `db-${relays[0]}`,
-          // dbName: `db-${!activeRelayUrl ? relays[0] : relays.find((relay) => relay.includes(activeRelayUrl))}`,
-        }),
+        cacheAdapter: relay
+          ? new NDKCacheAdapterDexie({
+              dbName: `db-${relay}`,
+            })
+          : undefined,
       }),
-    [relays],
+    [relay],
   );
 
   useNostrHooks(ndk);
 
   const { globalNdk, setGlobalSigner } = useGlobalNdk();
+
   useEffect(() => {
     globalNdk.connect();
   }, [globalNdk]);
@@ -52,14 +40,5 @@ export const App = () => {
     setGlobalSigner(ndk.signer);
   }, [ndk.signer, setGlobalSigner]);
 
-  return (
-    <>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <RouterProvider router={router} />
-        <UserLoginModal />
-        <ZapModal />
-        <Toaster />
-      </ThemeProvider>
-    </>
-  );
+  return <Outlet />;
 };

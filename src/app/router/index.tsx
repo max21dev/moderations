@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import { App } from '@/app';
+
 /**
  * Folder Structure:
  *
@@ -101,146 +103,189 @@ const GroupEventPage = () => import('@/pages/relays/relay/groups/group/group-eve
 export const router = createBrowserRouter([
   {
     path: '/',
-    async lazy() {
-      return { Component: (await HomePage()).HomePage };
-    },
-  },
-  {
-    path: '/relays',
-    async lazy() {
-      return { Component: (await RelaysPage()).RelaysPage };
-    },
-  },
-  {
-    path: '/relays/new-relay',
-    async lazy() {
-      return { Component: (await NewRelayPage()).NewRelayPage };
-    },
-  },
-  {
-    path: '/relays/:relay',
-    async lazy() {
-      return { Component: (await RelayPage()).RelayPage };
-    },
-  },
-  {
-    path: '/relays/:relay/edit-relay',
-    async lazy() {
-      return { Component: (await EditRelayPage()).EditRelayPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups',
-    async lazy() {
-      return { Component: (await GroupsPage()).GroupsPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/new-group',
-    async lazy() {
-      return { Component: (await NewGroupPage()).NewGroupPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group',
-    async lazy() {
-      return { Component: (await GroupPage()).GroupPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/edit-group',
-    async lazy() {
-      return { Component: (await EditGroupPage()).EditGroupPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-admins',
-    async lazy() {
-      return { Component: (await GroupAdminsPage()).GroupAdminsPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-admins/add-group-admin',
-    async lazy() {
-      return { Component: (await AddGroupAdminPage()).AddGroupAdminPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-admins/:group-admin',
-    async lazy() {
-      return { Component: (await GroupAdminPage()).GroupAdminPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-admins/:group-admin/edit-group-admin',
-    async lazy() {
-      return { Component: (await EditGroupAdminPage()).EditGroupAdminPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-admins/:group-admin/group-admin-events',
-    async lazy() {
-      return { Component: (await GroupAdminEventsPage()).GroupAdminEventsPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-admins/:group-admin/group-admin-events/:group-admin-event',
-    async lazy() {
-      return { Component: (await GroupAdminEventPage()).GroupAdminEventPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-members',
-    async lazy() {
-      return { Component: (await GroupMembersPage()).GroupMembersPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-members/add-group-member',
-    async lazy() {
-      return { Component: (await AddGroupMemberPage()).AddGroupMemberPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-members/:group-member',
-    async lazy() {
-      return { Component: (await GroupMemberPage()).GroupMemberPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-members/:group-member/edit-group-member',
-    async lazy() {
-      return { Component: (await EditGroupMemberPage()).EditGroupMemberPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-members/:group-member/group-member-events',
-    async lazy() {
-      return { Component: (await GroupMemberEventsPage()).GroupMemberEventsPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-members/:group-member/group-member-events/:group-member-event',
-    async lazy() {
-      return { Component: (await GroupMemberEventPage()).GroupMemberEventPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-events',
-    async lazy() {
-      return { Component: (await GroupEventsPage()).GroupEventsPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-events/new-group-event',
-    async lazy() {
-      return { Component: (await NewGroupEventPage()).NewGroupEventPage };
-    },
-  },
-  {
-    path: '/relays/:relay/groups/:group/group-events/:group-event',
-    async lazy() {
-      return { Component: (await GroupEventPage()).GroupEventPage };
-    },
+    element: <App />,
+    children: [
+      {
+        path: '/',
+        async lazy() {
+          return { Component: (await HomePage()).HomePage };
+        },
+      },
+      {
+        path: 'relays',
+        async lazy() {
+          return { Component: (await RelaysPage()).RelaysPage };
+        },
+        children: [
+          {
+            path: 'new-relay',
+            async lazy() {
+              return { Component: (await NewRelayPage()).NewRelayPage };
+            },
+          },
+          {
+            path: ':relay',
+            async lazy() {
+              return { Component: (await RelayPage()).RelayPage };
+            },
+            children: [
+              {
+                path: 'edit-relay',
+                async lazy() {
+                  return { Component: (await EditRelayPage()).EditRelayPage };
+                },
+              },
+              {
+                path: 'groups',
+                async lazy() {
+                  return { Component: (await GroupsPage()).GroupsPage };
+                },
+                children: [
+                  {
+                    path: 'new-group',
+                    async lazy() {
+                      return { Component: (await NewGroupPage()).NewGroupPage };
+                    },
+                  },
+                  {
+                    path: ':group',
+                    async lazy() {
+                      return { Component: (await GroupPage()).GroupPage };
+                    },
+                    children: [
+                      {
+                        path: 'edit-group',
+                        async lazy() {
+                          return { Component: (await EditGroupPage()).EditGroupPage };
+                        },
+                      },
+                      {
+                        path: 'group-admins',
+                        async lazy() {
+                          return { Component: (await GroupAdminsPage()).GroupAdminsPage };
+                        },
+                        children: [
+                          {
+                            path: 'add-group-admin',
+                            async lazy() {
+                              return { Component: (await AddGroupAdminPage()).AddGroupAdminPage };
+                            },
+                          },
+                          {
+                            path: ':group-admin',
+                            async lazy() {
+                              return { Component: (await GroupAdminPage()).GroupAdminPage };
+                            },
+                            children: [
+                              {
+                                path: 'edit-group-admin',
+                                async lazy() {
+                                  return {
+                                    Component: (await EditGroupAdminPage()).EditGroupAdminPage,
+                                  };
+                                },
+                              },
+                              {
+                                path: 'group-admin-events',
+                                async lazy() {
+                                  return {
+                                    Component: (await GroupAdminEventsPage()).GroupAdminEventsPage,
+                                  };
+                                },
+                                children: [
+                                  {
+                                    path: ':group-admin-event',
+                                    async lazy() {
+                                      return {
+                                        Component: (await GroupAdminEventPage())
+                                          .GroupAdminEventPage,
+                                      };
+                                    },
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      {
+                        path: 'group-members',
+                        async lazy() {
+                          return { Component: (await GroupMembersPage()).GroupMembersPage };
+                        },
+                        children: [
+                          {
+                            path: 'add-group-member',
+                            async lazy() {
+                              return { Component: (await AddGroupMemberPage()).AddGroupMemberPage };
+                            },
+                          },
+                          {
+                            path: ':group-member',
+                            async lazy() {
+                              return { Component: (await GroupMemberPage()).GroupMemberPage };
+                            },
+                            children: [
+                              {
+                                path: 'edit-group-member',
+                                async lazy() {
+                                  return {
+                                    Component: (await EditGroupMemberPage()).EditGroupMemberPage,
+                                  };
+                                },
+                              },
+                              {
+                                path: 'group-member-events',
+                                async lazy() {
+                                  return {
+                                    Component: (await GroupMemberEventsPage())
+                                      .GroupMemberEventsPage,
+                                  };
+                                },
+                                children: [
+                                  {
+                                    path: ':group-member-event',
+                                    async lazy() {
+                                      return {
+                                        Component: (await GroupMemberEventPage())
+                                          .GroupMemberEventPage,
+                                      };
+                                    },
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      {
+                        path: 'group-events',
+                        async lazy() {
+                          return { Component: (await GroupEventsPage()).GroupEventsPage };
+                        },
+                        children: [
+                          {
+                            path: 'new-group-event',
+                            async lazy() {
+                              return { Component: (await NewGroupEventPage()).NewGroupEventPage };
+                            },
+                          },
+                          {
+                            path: ':group-event',
+                            async lazy() {
+                              return { Component: (await GroupEventPage()).GroupEventPage };
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
 ]);
