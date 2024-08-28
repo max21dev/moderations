@@ -4,21 +4,23 @@ import { useAutoLogin, useNostrHooks } from 'nostr-hooks';
 import { useEffect, useMemo } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import './index.css';
-
-import { router } from '@/pages';
+import { UserLoginModal } from '@/features/users';
 
 import { ThemeProvider } from '@/shared/components/theme-provider';
 import { Toaster } from '@/shared/components/ui/toaster';
+import { ZapModal } from '@/shared/components/zap-modal';
 
 import { useGlobalNdk } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
+
+import './index.css';
+import { router } from './router';
 
 export const App = () => {
   const relays = useStore((state) => state.relays);
   console.log('relays', relays);
   const activeRelayUrl = useStore((state) => state.activeRelayUrl);
-    console.log('activeRelayUrl', activeRelayUrl);
+  console.log('activeRelayUrl', activeRelayUrl);
 
   const ndk = useMemo(
     () =>
@@ -37,7 +39,8 @@ export const App = () => {
     [relays],
   );
 
-  useNostrHooks();
+  useNostrHooks(ndk);
+
   const { globalNdk, setGlobalSigner } = useGlobalNdk();
   useEffect(() => {
     globalNdk.connect();
@@ -53,6 +56,8 @@ export const App = () => {
     <>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
+        <UserLoginModal />
+        <ZapModal />
         <Toaster />
       </ThemeProvider>
     </>
