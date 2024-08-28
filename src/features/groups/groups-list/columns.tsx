@@ -98,7 +98,7 @@ export const columns: ColumnDef<Group>[] = [
       const location = useLocation();
 
       const handleNavigation = () => {
-        const newPath = `${location.pathname}/groups/${row.getValue('id')}`;
+        const newPath = `${location.pathname}${row.getValue('id')}`;
         navigate(newPath);
       };
 
