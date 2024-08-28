@@ -97,7 +97,7 @@ export const useStore = create<
 
       // Relay State
 
-      relays: ['wss://groups.fiatjaf.com', 'wss://relay.groups.nip29.com'],
+      relays: ['wss://relay.groups.nip29.com', 'wss://groups.fiatjaf.com'],
 
       addRelay: (relay) => {
         const { relays } = get();

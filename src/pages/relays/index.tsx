@@ -1,5 +1,11 @@
-import { RelaysList } from '@/features/relays';
+import { Outlet } from 'react-router-dom';
 
-export function RelaysPage() {
-  return <RelaysList />;
-}
+export const RelaysPage = () => {
+  return (
+    <div>
+      <h1>Relays Page</h1>
+
+      <Outlet />
+    </div>
+  );
+};

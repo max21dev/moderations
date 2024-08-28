@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
 
-export const HomePage = () => {
+export const GroupPage = () => {
   return (
     <div>
-      <h1>Home Page</h1>
+      <h1>Group Page</h1>
 
       <Outlet />
     </div>

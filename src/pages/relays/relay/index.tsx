@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
 
-export const HomePage = () => {
+export const RelayPage = () => {
   return (
     <div>
-      <h1>Home Page</h1>
+      <h1>Relay Page</h1>
 
       <Outlet />
     </div>
