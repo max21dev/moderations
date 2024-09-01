@@ -1,5 +1,5 @@
 import { useStore } from '@/shared/store';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/shared/components/ui/button';
 import {
   Table,
@@ -56,7 +56,6 @@ export const RelaysList = () => {
           ))}
         </TableBody>
       </Table>
-      <Outlet />
     </div>
   );
 };
