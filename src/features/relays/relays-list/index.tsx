@@ -39,12 +39,8 @@ export const RelaysList = () => {
           {relays.map((relay) => (
             <TableRow key={relay}>
               <TableCell className="font-medium">{relay}</TableCell>
-              <TableCell
-                className={`ml-2 ${relay?.status === 'Connected' ? 'text-green-500' : 'text-red-500'}`}
-              >
-                {relay?.staus}
-              </TableCell>
-              <TableCell>{relay?.about}</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>-</TableCell>
               <TableCell className="text-right">
                 <Button className="ml-2" variant="outline" onClick={() => handleRelayClick(relay)}>
                   <MessagesSquare className="h-5 w-5 mr-2" /> Groups
@@ -60,7 +56,7 @@ export const RelaysList = () => {
           ))}
         </TableBody>
       </Table>
-      <Outlet/>
+      <Outlet />
     </div>
   );
 };
