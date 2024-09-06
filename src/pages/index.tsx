@@ -1,30 +1,22 @@
 import NDK from '@nostr-dev-kit/ndk';
 import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
-import { useAutoLogin, useNostrHooks } from 'nostr-hooks';
+import { useAutoLogin, useNostrHooks, useSigner } from 'nostr-hooks';
 import { useEffect, useMemo } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 import { Navbar } from '@/features/navbar';
+import { UserLoginModal } from '@/features/users';
 
-import { Button } from '@/shared/components/ui/button';
-
-import { useGlobalNdk } from '@/shared/hooks';
+import { useGlobalNdk, useLoginModalState } from '@/shared/hooks';
 
 export const HomePage = () => {
-  return (
-    <div>
-      <Button
-        variant="ghost"
-        onClick={() => {
-          window.location.href = '/relays';
-        }}
-      >
-        Navigate to relays page
-      </Button>
+  const navigate = useNavigate();
 
-      <Outlet />
-    </div>
-  );
+  useEffect(() => {
+    navigate('/relays');
+  }, [navigate]);
+
+  return null;
 };
 
 export const Layout = () => {
@@ -55,9 +47,22 @@ export const Layout = () => {
 
   useAutoLogin();
 
+  const { signer } = useSigner();
+
   useEffect(() => {
-    setGlobalSigner(ndk.signer);
-  }, [ndk.signer, setGlobalSigner]);
+    setGlobalSigner(signer);
+  }, [signer, setGlobalSigner]);
+
+  const { setIsLoginModalOpen } = useLoginModalState();
+
+  useEffect(() => {
+    // Force user to login
+    setIsLoginModalOpen(!signer);
+  }, [signer, setIsLoginModalOpen]);
+
+  if (!signer) {
+    return <UserLoginModal />;
+  }
 
   return (
     <div className="w-full h-full">
