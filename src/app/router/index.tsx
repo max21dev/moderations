@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { App } from '@/app';
+import { Layout } from '@/pages';
 
 /**
  * Folder Structure:
@@ -103,7 +103,7 @@ const GroupEventPage = () => import('@/pages/relays/relay/groups/group/group-eve
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <Layout />,
     children: [
       {
         path: '/',
