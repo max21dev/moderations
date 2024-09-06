@@ -58,6 +58,8 @@ import { Layout } from '@/pages';
 
 const HomePage = () => import('@/pages');
 
+const LogoutPage = () => import('@/pages/logout');
+
 const RelaysPage = () => import('@/pages/relays');
 const NewRelayPage = () => import('@/pages/relays/new-relay');
 const RelayPage = () => import('@/pages/relays/relay');
@@ -109,6 +111,12 @@ export const router = createBrowserRouter([
         path: '/',
         async lazy() {
           return { Component: (await HomePage()).HomePage };
+        },
+      },
+      {
+        path: 'logout',
+        async lazy() {
+          return { Component: (await LogoutPage()).LogoutPage };
         },
       },
       {
