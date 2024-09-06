@@ -13,13 +13,11 @@ import { Edit, MessagesSquare, Trash } from 'lucide-react';
 
 export const RelaysList = () => {
   const relays = useStore((state) => state.relays);
-  const setActiveRelayUrl = useStore((state) => state.setActiveRelayUrl);
 
   const navigate = useNavigate();
 
   const handleRelayClick = (relay: string) => {
-    setActiveRelayUrl(relay);
-    navigate(`/relays/${encodeURIComponent(relay)}/groups/`); // Navigate to the proper page
+    navigate(`/relays/${encodeURIComponent(relay)}/groups/`);
   };
 
   return (
