@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
 
-import { Providers } from '@/app/providers';
+import { App } from '@/app';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<Providers />);
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />);

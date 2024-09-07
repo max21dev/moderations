@@ -27,26 +27,20 @@ type GlobalNDKActions = {
 };
 
 type ModerationState = {
-  activeRelayUrl: string | undefined;
   activeGroupId: string | undefined;
-  activeUserPub: string | undefined;
 };
 
 type ModerationActions = {
-  setActiveRelayUrl: (activeRelayUrl: string | undefined) => void;
   setActiveGroupId: (activeGroupId: string | undefined) => void;
-  setActiveUserPub: (activeUserPub: string | undefined) => void;
 };
 
 type RelaysState = {
   relays: string[];
-  activeRelayUrl: string | undefined;
 };
 
 type RelaysActions = {
   addRelay: (relay: string) => void;
   safeRemoveRelay: (relay: string) => void;
-  setActiveRelayUrl: (activeRelayUrl: string) => void;
 };
 
 export const useStore = create<
@@ -88,12 +82,8 @@ export const useStore = create<
       // moderation State
 
       activeGroupId: undefined,
-      activeRelayUrl: undefined,
-      activeUserPub: undefined,
 
       setActiveGroupId: (activeGroupId) => set({ activeGroupId }),
-      setActiveRelayUrl: (activeRelayUrl) => set({ activeRelayUrl }),
-      setActiveUserPub: (activeUserPub) => set({ activeUserPub }),
 
       // Relay State
 

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { App } from '@/app';
+import { Layout } from '@/pages';
 
 /**
  * Folder Structure:
@@ -58,6 +58,8 @@ import { App } from '@/app';
 
 const HomePage = () => import('@/pages');
 
+const LogoutPage = () => import('@/pages/logout');
+
 const RelaysPage = () => import('@/pages/relays');
 const NewRelayPage = () => import('@/pages/relays/new-relay');
 const RelayPage = () => import('@/pages/relays/relay');
@@ -103,12 +105,18 @@ const GroupEventPage = () => import('@/pages/relays/relay/groups/group/group-eve
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <Layout />,
     children: [
       {
         path: '/',
         async lazy() {
           return { Component: (await HomePage()).HomePage };
+        },
+      },
+      {
+        path: 'logout',
+        async lazy() {
+          return { Component: (await LogoutPage()).LogoutPage };
         },
       },
       {
