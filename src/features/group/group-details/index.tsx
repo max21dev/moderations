@@ -35,7 +35,7 @@ export const GroupDetails = () => {
         {members && (
           <div>
             <h5 className="font-medium pb-2 m-4 border-b-2 border-b-blue-100">
-              Members ({members.length}){' '}
+              Members ({members.length})
             </h5>
             {members.map((member) => (
               <UserInfoRow pubkey={member.publicKey} key={member.publicKey} />
