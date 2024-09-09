@@ -6,9 +6,10 @@ import { useParams } from 'react-router-dom';
 
 export const GroupDetails = () => {
   const { groupId } = useParams();
-  if (!groupId) return null;
 
   const { admins, group, members } = useGroupDetails({ groupId });
+
+  if (!groupId) return null;
 
   return (
     <div className="h-full overflow-y-auto">
