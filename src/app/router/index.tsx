@@ -114,12 +114,6 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: 'logout',
-        async lazy() {
-          return { Component: (await LogoutPage()).LogoutPage };
-        },
-      },
-      {
         path: 'relays',
         async lazy() {
           return { Component: (await RelaysPage()).RelaysPage };
@@ -295,5 +289,11 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: '/logout',
+    async lazy() {
+      return { Component: (await LogoutPage()).LogoutPage };
+    },
   },
 ]);
