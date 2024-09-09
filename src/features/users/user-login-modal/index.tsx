@@ -22,11 +22,15 @@ export const UserLoginModal = () => {
     handleSecretKeyGenerate,
     isLoginModalOpen,
     setIsLoginModalOpen,
+    globalSigner,
   } = useLoginModal();
 
   return (
     <>
-      <Dialog open={isLoginModalOpen} onOpenChange={(open) => setIsLoginModalOpen(open)}>
+      <Dialog
+        open={isLoginModalOpen}
+        onOpenChange={(open) => (globalSigner ? setIsLoginModalOpen(open) : true)}
+      >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Login</DialogTitle>

@@ -1,8 +1,5 @@
-import NDK from '@nostr-dev-kit/ndk';
-import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
-import { useAutoLogin, useNostrHooks, useSigner } from 'nostr-hooks';
-import { useEffect, useMemo } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { Navbar } from '@/features/navbar';
 import { UserLoginModal } from '@/features/users';
@@ -20,47 +17,16 @@ export const HomePage = () => {
 };
 
 export const Layout = () => {
-  const { relay } = useParams();
-
-  const ndk = useMemo(
-    () =>
-      new NDK({
-        explicitRelayUrls: relay ? [relay] : undefined,
-        autoConnectUserRelays: false,
-        autoFetchUserMutelist: false,
-        cacheAdapter: relay
-          ? new NDKCacheAdapterDexie({
-              dbName: `db-${relay}`,
-            })
-          : undefined,
-      }),
-    [relay],
-  );
-
-  useNostrHooks(ndk);
-
-  const { globalNdk, setGlobalSigner } = useGlobalNdk();
-
-  useEffect(() => {
-    globalNdk.connect();
-  }, [globalNdk]);
-
-  useAutoLogin();
-
-  const { signer } = useSigner();
-
-  useEffect(() => {
-    setGlobalSigner(signer);
-  }, [signer, setGlobalSigner]);
+  const { globalNdk } = useGlobalNdk();
 
   const { setIsLoginModalOpen } = useLoginModalState();
 
   useEffect(() => {
     // Force user to login
-    setIsLoginModalOpen(!signer);
-  }, [signer, setIsLoginModalOpen]);
+    setIsLoginModalOpen(!globalNdk.signer);
+  }, [globalNdk.signer, setIsLoginModalOpen]);
 
-  if (!signer) {
+  if (!globalNdk.signer) {
     return <UserLoginModal />;
   }
 

@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import { useLoginModalState } from '@/shared/hooks';
+import { useLoginModalState, useGlobalNdk } from '@/shared/hooks';
 
 export const useLoginModal = () => {
   const [nip46Input, setNip46Input] = useState('');
@@ -14,14 +14,19 @@ export const useLoginModal = () => {
 
   const { isLoginModalOpen, closeLoginModal, setIsLoginModalOpen } = useLoginModalState();
 
-  const { loginWithExtention, loginWithRemoteSigner, loginWithSecretKey } = useLogin();
+  const { globalNdk, setGlobalNdk } = useGlobalNdk();
+
+  const { loginWithExtension, loginWithRemoteSigner, loginWithSecretKey } = useLogin({
+    customNdk: globalNdk,
+    setCustomNdk: setGlobalNdk,
+  });
 
   const { toast } = useToast();
 
   const handleExtensionSigner = () => {
     setLoading(true);
 
-    loginWithExtention({
+    loginWithExtension({
       onError: (e) => {
         console.error(e);
         toast({ title: 'Error', description: String(e), variant: 'destructive' });
@@ -87,5 +92,6 @@ export const useLoginModal = () => {
     handleSecretKeyGenerate,
     isLoginModalOpen,
     setIsLoginModalOpen,
+    globalSigner: globalNdk.signer,
   };
 };

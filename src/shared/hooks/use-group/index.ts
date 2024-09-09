@@ -1,11 +1,14 @@
 import { useSubscribe } from 'nostr-hooks';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useNip29Ndk } from '@/shared/hooks';
 import { Group } from '@/shared/types';
 
 type Status = 'idle' | 'loading' | 'success';
 
 export const useGroup = (groupId: string | undefined) => {
+  const { nip29Ndk } = useNip29Ndk();
+
   const [status, setStatus] = useState<Status>('idle');
 
   const { events: groupsEvents } = useSubscribe(
@@ -13,6 +16,7 @@ export const useGroup = (groupId: string | undefined) => {
       () => ({
         filters: !groupId ? [] : [{ kinds: [39000], '#d': [groupId] }],
         enabled: !!groupId,
+        customNdk: nip29Ndk,
       }),
       [groupId],
     ),
@@ -27,13 +31,14 @@ export const useGroup = (groupId: string | undefined) => {
 
     const nameTag = groupEvent.getMatchingTags('name')[0];
     const pictureTag = groupEvent.getMatchingTags('picture')[0];
+    const aboutTag = groupEvent.getMatchingTags('about')[0];
 
     return {
       id: groupEvent.dTag,
       name: nameTag ? nameTag[1] : 'Unknown',
       privacy: groupEvent.getMatchingTags('public') ? 'public' : 'private',
       type: groupEvent.getMatchingTags('open') ? 'open' : 'closed',
-      about: groupEvent.getMatchingTags('about') ? groupEvent.getMatchingTags('about') : '',
+      about: aboutTag ? aboutTag[1] : '',
       picture: pictureTag ? pictureTag[1] : '',
       event: groupEvent,
     } as Group;

@@ -18,12 +18,14 @@ type AppActions = {
   setZapTarget: (target: NDKEvent | NDKUser | undefined) => void;
 };
 
-type GlobalNDKState = {
-  globalNDK: NDK;
+type NdkState = {
+  globalNdk: NDK;
+  nip29Ndk: NDK;
 };
 
-type GlobalNDKActions = {
-  setGlobalNDK: (globalNDK: NDK) => void;
+type NdkActions = {
+  setGlobalNdk: (globalNdk: NDK) => void;
+  setNip29Ndk: (nip29Ndk: NDK) => void;
 };
 
 type ModerationState = {
@@ -46,8 +48,8 @@ type RelaysActions = {
 export const useStore = create<
   AppState &
     AppActions &
-    GlobalNDKState &
-    GlobalNDKActions &
+    NdkState &
+    NdkActions &
     ModerationState &
     ModerationActions &
     RelaysState &
@@ -69,15 +71,24 @@ export const useStore = create<
 
       setZapTarget: (target) => set({ zapTarget: target }),
 
-      // Global NDK State
+      // NDK State
 
-      globalNDK: new NDK({
+      globalNdk: new NDK({
         explicitRelayUrls: ['wss://nos.lol'],
-        autoConnectUserRelays: false,
+        autoConnectUserRelays: true,
         autoFetchUserMutelist: false,
       }),
 
-      setGlobalNDK: (globalNDK) => set({ globalNDK }),
+      setGlobalNdk: (globalNdk) => set({ globalNdk }),
+
+      nip29Ndk: new NDK({
+        explicitRelayUrls: [],
+        autoConnectUserRelays: false,
+        autoFetchUserMutelist: false,
+        cacheAdapter: undefined,
+      }),
+
+      setNip29Ndk: (nip29Ndk) => set({ nip29Ndk }),
 
       // moderation State
 
