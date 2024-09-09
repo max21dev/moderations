@@ -1,12 +1,15 @@
 import { useSubscribe } from 'nostr-hooks';
 import { useMemo } from 'react';
 
+import { useNip29Ndk } from '@/shared/hooks';
 import { Group } from '@/shared/types';
 
 const filters = [{ kinds: [39000], limit: 100 }];
 
 export const useGroups = () => {
-  const { events: groupsEvents } = useSubscribe({ filters });
+  const { nip29Ndk } = useNip29Ndk();
+
+  const { events: groupsEvents } = useSubscribe({ filters, customNdk: nip29Ndk });
 
   const groups = useMemo(
     () =>
@@ -21,6 +24,7 @@ export const useGroups = () => {
             ({
               id: e.dTag,
               name: e.getMatchingTags('name')?.[0]?.[1],
+              about: e.getMatchingTags('about')?.[0]?.[1],
               privacy: e.getMatchingTags('public') ? 'public' : 'private',
               type: e.getMatchingTags('open') ? 'open' : 'closed',
               picture: e.getMatchingTags('picture')?.[0]?.[1] || '',
