@@ -34,7 +34,7 @@ export const Layout = () => {
     <div className="w-full h-full">
       <Navbar />
 
-      <div className="mx-auto max-w-screen-lg">
+      <div className="mx-auto max-w-screen-lg py-4">
         <Outlet />
       </div>
     </div>

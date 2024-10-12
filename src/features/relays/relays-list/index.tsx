@@ -1,5 +1,6 @@
-import { useStore } from '@/shared/store';
+import { Edit, MessagesSquare, Trash } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+
 import { Button } from '@/shared/components/ui/button';
 import {
   Table,
@@ -9,7 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/shared/components/ui/table';
-import { Edit, MessagesSquare, Trash } from 'lucide-react';
+import { H3 } from '@/shared/components/ui/typography/h3';
+
+import { useStore } from '@/shared/store';
 
 export const RelaysList = () => {
   const relays = useStore((state) => state.relays);
@@ -21,8 +24,8 @@ export const RelaysList = () => {
   };
 
   return (
-    <div className="p-4 rounded-lg mt-4">
-      <h3 className="font-bold mb-2">My Relays</h3>
+    <>
+      <H3>My Relays</H3>
 
       <Table>
         <TableHeader>
@@ -54,6 +57,6 @@ export const RelaysList = () => {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 };
