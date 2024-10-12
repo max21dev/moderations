@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 
 import { Layout } from '@/pages';
 
@@ -115,10 +115,14 @@ export const router = createBrowserRouter([
       },
       {
         path: 'relays',
-        async lazy() {
-          return { Component: (await RelaysPage()).RelaysPage };
-        },
+        element: <Outlet />,
         children: [
+          {
+            path: '/relays',
+            async lazy() {
+              return { Component: (await RelaysPage()).RelaysPage };
+            },
+          },
           {
             path: 'new-relay',
             async lazy() {
@@ -127,10 +131,14 @@ export const router = createBrowserRouter([
           },
           {
             path: ':relay',
-            async lazy() {
-              return { Component: (await RelayPage()).RelayPage };
-            },
+            element: <Outlet />,
             children: [
+              {
+                path: '/relays/:relay',
+                async lazy() {
+                  return { Component: (await RelayPage()).RelayPage };
+                },
+              },
               {
                 path: 'edit-relay',
                 async lazy() {
@@ -139,10 +147,14 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'groups',
-                async lazy() {
-                  return { Component: (await GroupsPage()).GroupsPage };
-                },
+                element: <Outlet />,
                 children: [
+                  {
+                    path: '/relays/:relay/groups',
+                    async lazy() {
+                      return { Component: (await GroupsPage()).GroupsPage };
+                    },
+                  },
                   {
                     path: 'new-group',
                     async lazy() {
@@ -151,10 +163,14 @@ export const router = createBrowserRouter([
                   },
                   {
                     path: ':groupId',
-                    async lazy() {
-                      return { Component: (await GroupPage()).GroupPage };
-                    },
+                    element: <Outlet />,
                     children: [
+                      {
+                        path: '/relays/:relay/groups/:groupId',
+                        async lazy() {
+                          return { Component: (await GroupPage()).GroupPage };
+                        },
+                      },
                       {
                         path: 'edit-group',
                         async lazy() {
@@ -163,10 +179,14 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: 'group-admins',
-                        async lazy() {
-                          return { Component: (await GroupAdminsPage()).GroupAdminsPage };
-                        },
+                        element: <Outlet />,
                         children: [
+                          {
+                            path: '/relays/:relay/groups/:groupId/group-admins',
+                            async lazy() {
+                              return { Component: (await GroupAdminsPage()).GroupAdminsPage };
+                            },
+                          },
                           {
                             path: 'add-group-admin',
                             async lazy() {
@@ -175,10 +195,14 @@ export const router = createBrowserRouter([
                           },
                           {
                             path: ':group-admin',
-                            async lazy() {
-                              return { Component: (await GroupAdminPage()).GroupAdminPage };
-                            },
+                            element: <Outlet />,
                             children: [
+                              {
+                                path: '/relays/:relay/groups/:groupId/group-admins/:group-admin',
+                                async lazy() {
+                                  return { Component: (await GroupAdminPage()).GroupAdminPage };
+                                },
+                              },
                               {
                                 path: 'edit-group-admin',
                                 async lazy() {
@@ -189,12 +213,17 @@ export const router = createBrowserRouter([
                               },
                               {
                                 path: 'group-admin-events',
-                                async lazy() {
-                                  return {
-                                    Component: (await GroupAdminEventsPage()).GroupAdminEventsPage,
-                                  };
-                                },
+                                element: <Outlet />,
                                 children: [
+                                  {
+                                    path: '/relays/:relay/groups/:groupId/group-admins/:group-admin/group-admin-events',
+                                    async lazy() {
+                                      return {
+                                        Component: (await GroupAdminEventsPage())
+                                          .GroupAdminEventsPage,
+                                      };
+                                    },
+                                  },
                                   {
                                     path: ':group-admin-event',
                                     async lazy() {
@@ -212,10 +241,14 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: 'group-members',
-                        async lazy() {
-                          return { Component: (await GroupMembersPage()).GroupMembersPage };
-                        },
+                        element: <Outlet />,
                         children: [
+                          {
+                            path: '/relays/:relay/groups/:groupId/group-members',
+                            async lazy() {
+                              return { Component: (await GroupMembersPage()).GroupMembersPage };
+                            },
+                          },
                           {
                             path: 'add-group-member',
                             async lazy() {
@@ -224,10 +257,14 @@ export const router = createBrowserRouter([
                           },
                           {
                             path: ':group-member',
-                            async lazy() {
-                              return { Component: (await GroupMemberPage()).GroupMemberPage };
-                            },
+                            element: <Outlet />,
                             children: [
+                              {
+                                path: '/relays/:relay/groups/:groupId/group-members/:group-member',
+                                async lazy() {
+                                  return { Component: (await GroupMemberPage()).GroupMemberPage };
+                                },
+                              },
                               {
                                 path: 'edit-group-member',
                                 async lazy() {
@@ -238,13 +275,17 @@ export const router = createBrowserRouter([
                               },
                               {
                                 path: 'group-member-events',
-                                async lazy() {
-                                  return {
-                                    Component: (await GroupMemberEventsPage())
-                                      .GroupMemberEventsPage,
-                                  };
-                                },
+                                element: <Outlet />,
                                 children: [
+                                  {
+                                    path: '/relays/:relay/groups/:groupId/group-members/:group-member/group-member-events',
+                                    async lazy() {
+                                      return {
+                                        Component: (await GroupMemberEventsPage())
+                                          .GroupMemberEventsPage,
+                                      };
+                                    },
+                                  },
                                   {
                                     path: ':group-member-event',
                                     async lazy() {
@@ -262,10 +303,14 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: 'group-events',
-                        async lazy() {
-                          return { Component: (await GroupEventsPage()).GroupEventsPage };
-                        },
+                        element: <Outlet />,
                         children: [
+                          {
+                            path: '/relays/:relay/groups/:groupId/group-events',
+                            async lazy() {
+                              return { Component: (await GroupEventsPage()).GroupEventsPage };
+                            },
+                          },
                           {
                             path: 'new-group-event',
                             async lazy() {

@@ -1,7 +1,7 @@
 import NDK from '@nostr-dev-kit/ndk';
 import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
 import { useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useGlobalNdk, useNip29Ndk } from '@/shared/hooks';
 
@@ -30,8 +30,6 @@ export const RelayPage = () => {
   return (
     <div>
       <h5>Relay Page</h5>
-
-      <Outlet />
     </div>
   );
 };
