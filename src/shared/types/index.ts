@@ -54,3 +54,6 @@ export type LimitFilter = {
   until?: number;
   limit?: number;
 };
+
+export type Crumb = { to?: string; label: string };
+export type LoaderData = { crumbs: Crumb[] };
