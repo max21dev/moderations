@@ -16,7 +16,7 @@ export const HomePage = () => {
   return null;
 };
 
-export const Layout = () => {
+export const HomeLayout = () => {
   const { globalNdk } = useGlobalNdk();
 
   const { setIsLoginModalOpen } = useLoginModalState();
