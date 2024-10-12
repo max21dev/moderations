@@ -1,28 +1,37 @@
-import { useActiveUser } from 'nostr-hooks';
-import { useEffect, useState } from 'react';
+import { useActiveUser, useSubscribe } from 'nostr-hooks';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useGlobalNdk } from '@/shared/hooks';
 
 export const useRelaysList = () => {
   const [relays, setRelays] = useState<string[]>([]);
 
-  const { activeUser } = useActiveUser();
-
   const { globalNdk } = useGlobalNdk();
 
+  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+
+  const filters = useMemo(
+    () =>
+      activeUser
+        ? [{ authors: [activeUser.pubkey], kinds: [30078], '#d': ['moderations/relays'] }]
+        : [],
+    [activeUser],
+  );
+
+  const params = useMemo(
+    () => ({ filters, enabled: !!activeUser, customNdk: globalNdk }),
+    [filters, activeUser, globalNdk],
+  );
+
+  const { events } = useSubscribe(params);
+
   useEffect(() => {
-    if (!activeUser) return;
+    if (!events || events.length == 0) return;
 
-    globalNdk
-      .fetchEvent({ authors: [activeUser.pubkey], kinds: [30078], '#d': ['moderations/relays'] })
-      .then((e) => {
-        if (!e) return;
+    const relays = events[0].getMatchingTags('r')?.map((t) => t[1]);
 
-        const relays = e.getMatchingTags('r')?.map((t) => t[1]);
-
-        setRelays(relays || []);
-      });
-  }, [activeUser, globalNdk, setRelays]);
+    setRelays(relays || []);
+  }, [events, setRelays]);
 
   return { relays };
 };
