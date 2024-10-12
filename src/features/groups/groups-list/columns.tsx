@@ -8,6 +8,8 @@ import { Button } from '@/shared/components/ui/button';
 import { loader } from '@/shared/utils';
 import { ArrowUpDown, ExternalLinkIcon } from 'lucide-react';
 
+// TODO: Refactor and extract hooks
+
 export const columns: ColumnDef<Group>[] = [
   {
     accessorKey: 'picture',

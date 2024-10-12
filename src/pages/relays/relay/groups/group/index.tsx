@@ -1,12 +1,18 @@
-import { Outlet } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
+
+import { Breadcrumbs } from '@/features/breadcrumbs';
 import { GroupDetails } from '@/features/group';
 
+import { LoaderData } from '@/shared/types';
+
 export const GroupPage = () => {
+  const { crumbs } = useLoaderData() as LoaderData;
+
   return (
-    <div>
-      <h5>Group Page</h5>
+    <>
+      <Breadcrumbs crumbs={crumbs} />
+
       <GroupDetails />
-      <Outlet />
-    </div>
+    </>
   );
 };

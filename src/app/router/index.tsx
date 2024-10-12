@@ -1,6 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
-
-import { Layout } from '@/pages';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 
 /**
  * Folder Structure:
@@ -56,12 +54,14 @@ import { Layout } from '@/pages';
  *
  */
 
+const HomeLayout = () => import('@/pages');
 const HomePage = () => import('@/pages');
 
 const LogoutPage = () => import('@/pages/logout');
 
 const RelaysPage = () => import('@/pages/relays');
 const NewRelayPage = () => import('@/pages/relays/new-relay');
+const RelayLayout = () => import('@/pages/relays/relay');
 const RelayPage = () => import('@/pages/relays/relay');
 const EditRelayPage = () => import('@/pages/relays/relay/edit-relay');
 
@@ -105,7 +105,9 @@ const GroupEventPage = () => import('@/pages/relays/relay/groups/group/group-eve
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    async lazy() {
+      return { Component: (await HomeLayout()).HomeLayout };
+    },
     children: [
       {
         path: '/',
@@ -115,12 +117,20 @@ export const router = createBrowserRouter([
       },
       {
         path: 'relays',
-        async lazy() {
-          return { Component: (await RelaysPage()).RelaysPage };
-        },
+        element: <Outlet />,
         children: [
           {
+            path: '/relays',
+            loader: () => ({ crumbs: [{ label: 'Relays' }] }),
+            async lazy() {
+              return { Component: (await RelaysPage()).RelaysPage };
+            },
+          },
+          {
             path: 'new-relay',
+            loader: () => ({
+              crumbs: [{ label: 'Relays', to: '/relays' }, { label: 'New Relay' }],
+            }),
             async lazy() {
               return { Component: (await NewRelayPage()).NewRelayPage };
             },
@@ -128,59 +138,238 @@ export const router = createBrowserRouter([
           {
             path: ':relay',
             async lazy() {
-              return { Component: (await RelayPage()).RelayPage };
+              return { Component: (await RelayLayout()).RelayLayout };
             },
             children: [
               {
+                path: '/relays/:relay',
+                loader: ({ params }) => ({
+                  crumbs: [{ label: 'Relays', to: '/relays' }, { label: params.relay }],
+                }),
+                async lazy() {
+                  return { Component: (await RelayPage()).RelayPage };
+                },
+              },
+              {
                 path: 'edit-relay',
+                loader: ({ params }) => ({
+                  crumbs: [
+                    { label: 'Relays', to: '/relays' },
+                    {
+                      label: params.relay,
+                      to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                    },
+                    { label: 'Edit Relay' },
+                  ],
+                }),
                 async lazy() {
                   return { Component: (await EditRelayPage()).EditRelayPage };
                 },
               },
               {
                 path: 'groups',
-                async lazy() {
-                  return { Component: (await GroupsPage()).GroupsPage };
-                },
+                element: <Outlet />,
                 children: [
                   {
+                    path: '/relays/:relay/groups',
+                    loader: ({ params }) => ({
+                      crumbs: [
+                        { label: 'Relays', to: '/relays' },
+                        {
+                          label: params.relay,
+                          to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                        },
+                        { label: 'Groups' },
+                      ],
+                    }),
+                    async lazy() {
+                      return { Component: (await GroupsPage()).GroupsPage };
+                    },
+                  },
+                  {
                     path: 'new-group',
+                    loader: ({ params }) => ({
+                      crumbs: [
+                        { label: 'Relays', to: '/relays' },
+                        {
+                          label: params.relay,
+                          to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                        },
+                        {
+                          label: 'Groups',
+                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                        },
+                        { label: 'New Group' },
+                      ],
+                    }),
                     async lazy() {
                       return { Component: (await NewGroupPage()).NewGroupPage };
                     },
                   },
                   {
                     path: ':groupId',
-                    async lazy() {
-                      return { Component: (await GroupPage()).GroupPage };
-                    },
+                    element: <Outlet />,
                     children: [
                       {
+                        path: '/relays/:relay/groups/:groupId',
+                        loader: ({ params }) => ({
+                          crumbs: [
+                            { label: 'Relays', to: '/relays' },
+                            {
+                              label: params.relay,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                            },
+                            {
+                              label: 'Groups',
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                            },
+                            { label: params.groupId },
+                          ],
+                        }),
+                        async lazy() {
+                          return { Component: (await GroupPage()).GroupPage };
+                        },
+                      },
+                      {
                         path: 'edit-group',
+                        loader: ({ params }) => ({
+                          crumbs: [
+                            { label: 'Relays', to: '/relays' },
+                            {
+                              label: params.relay,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                            },
+                            {
+                              label: 'Groups',
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                            },
+                            {
+                              label: params.groupId,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                            },
+                            { label: 'Edit Group' },
+                          ],
+                        }),
                         async lazy() {
                           return { Component: (await EditGroupPage()).EditGroupPage };
                         },
                       },
                       {
                         path: 'group-admins',
-                        async lazy() {
-                          return { Component: (await GroupAdminsPage()).GroupAdminsPage };
-                        },
+                        element: <Outlet />,
                         children: [
                           {
+                            path: '/relays/:relay/groups/:groupId/group-admins',
+                            loader: ({ params }) => ({
+                              crumbs: [
+                                { label: 'Relays', to: '/relays' },
+                                {
+                                  label: params.relay,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                },
+                                {
+                                  label: 'Groups',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                },
+                                {
+                                  label: params.groupId,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                },
+                                { label: 'Group Admins' },
+                              ],
+                            }),
+                            async lazy() {
+                              return { Component: (await GroupAdminsPage()).GroupAdminsPage };
+                            },
+                          },
+                          {
                             path: 'add-group-admin',
+                            loader: ({ params }) => ({
+                              crumbs: [
+                                { label: 'Relays', to: '/relays' },
+                                {
+                                  label: params.relay,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                },
+                                {
+                                  label: 'Groups',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                },
+                                {
+                                  label: params.groupId,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                },
+                                {
+                                  label: 'Group Admins',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins`,
+                                },
+                                { label: 'Add Group Admin' },
+                              ],
+                            }),
                             async lazy() {
                               return { Component: (await AddGroupAdminPage()).AddGroupAdminPage };
                             },
                           },
                           {
                             path: ':group-admin',
-                            async lazy() {
-                              return { Component: (await GroupAdminPage()).GroupAdminPage };
-                            },
+                            element: <Outlet />,
                             children: [
                               {
+                                path: '/relays/:relay/groups/:groupId/group-admins/:group-admin',
+                                loader: ({ params }) => ({
+                                  crumbs: [
+                                    { label: 'Relays', to: '/relays' },
+                                    {
+                                      label: params.relay,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                    },
+                                    {
+                                      label: 'Groups',
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                    },
+                                    {
+                                      label: params.groupId,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                    },
+                                    {
+                                      label: 'Group Admins',
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins`,
+                                    },
+                                    { label: params.groupAdmin },
+                                  ],
+                                }),
+                                async lazy() {
+                                  return { Component: (await GroupAdminPage()).GroupAdminPage };
+                                },
+                              },
+                              {
                                 path: 'edit-group-admin',
+                                loader: ({ params }) => ({
+                                  crumbs: [
+                                    { label: 'Relays', to: '/relays' },
+                                    {
+                                      label: params.relay,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                    },
+                                    {
+                                      label: 'Groups',
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                    },
+                                    {
+                                      label: params.groupId,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                    },
+                                    {
+                                      label: 'Group Admins',
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins`,
+                                    },
+                                    {
+                                      label: params.groupAdmin,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins/${params.groupAdmin}`,
+                                    },
+                                    { label: 'Edit Group Admin' },
+                                  ],
+                                }),
                                 async lazy() {
                                   return {
                                     Component: (await EditGroupAdminPage()).EditGroupAdminPage,
@@ -189,14 +378,75 @@ export const router = createBrowserRouter([
                               },
                               {
                                 path: 'group-admin-events',
-                                async lazy() {
-                                  return {
-                                    Component: (await GroupAdminEventsPage()).GroupAdminEventsPage,
-                                  };
-                                },
+                                element: <Outlet />,
                                 children: [
                                   {
+                                    path: '/relays/:relay/groups/:groupId/group-admins/:group-admin/group-admin-events',
+                                    loader: ({ params }) => ({
+                                      crumbs: [
+                                        { label: 'Relays', to: '/relays' },
+                                        {
+                                          label: params.relay,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                        },
+                                        {
+                                          label: 'Groups',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                        },
+                                        {
+                                          label: params.groupId,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                        },
+                                        {
+                                          label: 'Group Admins',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins`,
+                                        },
+                                        {
+                                          label: params.groupAdmin,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins/${params.groupAdmin}`,
+                                        },
+                                        { label: 'Group Admin Events' },
+                                      ],
+                                    }),
+                                    async lazy() {
+                                      return {
+                                        Component: (await GroupAdminEventsPage())
+                                          .GroupAdminEventsPage,
+                                      };
+                                    },
+                                  },
+                                  {
                                     path: ':group-admin-event',
+                                    loader: ({ params }) => ({
+                                      crumbs: [
+                                        { label: 'Relays', to: '/relays' },
+                                        {
+                                          label: params.relay,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                        },
+                                        {
+                                          label: 'Groups',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                        },
+                                        {
+                                          label: params.groupId,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                        },
+                                        {
+                                          label: 'Group Admins',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins`,
+                                        },
+                                        {
+                                          label: params.groupAdmin,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins/${params.groupAdmin}`,
+                                        },
+                                        {
+                                          label: 'Group Admin Events',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-admins/${params.groupAdmin}/group-admin-events`,
+                                        },
+                                        { label: params.groupAdminEvent },
+                                      ],
+                                    }),
                                     async lazy() {
                                       return {
                                         Component: (await GroupAdminEventPage())
@@ -212,24 +462,120 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: 'group-members',
-                        async lazy() {
-                          return { Component: (await GroupMembersPage()).GroupMembersPage };
-                        },
+                        element: <Outlet />,
                         children: [
                           {
+                            path: '/relays/:relay/groups/:groupId/group-members',
+                            loader: ({ params }) => ({
+                              crumbs: [
+                                { label: 'Relays', to: '/relays' },
+                                {
+                                  label: params.relay,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                },
+                                {
+                                  label: 'Groups',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                },
+                                {
+                                  label: params.groupId,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                },
+                                { label: 'Group Members' },
+                              ],
+                            }),
+                            async lazy() {
+                              return { Component: (await GroupMembersPage()).GroupMembersPage };
+                            },
+                          },
+                          {
                             path: 'add-group-member',
+                            loader: ({ params }) => ({
+                              crumbs: [
+                                { label: 'Relays', to: '/relays' },
+                                {
+                                  label: params.relay,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                },
+                                {
+                                  label: 'Groups',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                },
+                                {
+                                  label: params.groupId,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                },
+                                {
+                                  label: 'Group Members',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members`,
+                                },
+                                { label: 'Add Group Member' },
+                              ],
+                            }),
                             async lazy() {
                               return { Component: (await AddGroupMemberPage()).AddGroupMemberPage };
                             },
                           },
                           {
                             path: ':group-member',
-                            async lazy() {
-                              return { Component: (await GroupMemberPage()).GroupMemberPage };
-                            },
+                            element: <Outlet />,
                             children: [
                               {
+                                path: '/relays/:relay/groups/:groupId/group-members/:group-member',
+                                loader: ({ params }) => ({
+                                  crumbs: [
+                                    { label: 'Relays', to: '/relays' },
+                                    {
+                                      label: params.relay,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                    },
+                                    {
+                                      label: 'Groups',
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                    },
+                                    {
+                                      label: params.groupId,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                    },
+                                    {
+                                      label: 'Group Members',
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members`,
+                                    },
+                                    { label: params.groupMember },
+                                  ],
+                                }),
+                                async lazy() {
+                                  return { Component: (await GroupMemberPage()).GroupMemberPage };
+                                },
+                              },
+                              {
                                 path: 'edit-group-member',
+                                loader: ({ params }) => ({
+                                  crumbs: [
+                                    { label: 'Relays', to: '/relays' },
+                                    {
+                                      label: params.relay,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                    },
+                                    {
+                                      label: 'Groups',
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                    },
+                                    {
+                                      label: params.groupId,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                    },
+                                    {
+                                      label: 'Group Members',
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members`,
+                                    },
+                                    {
+                                      label: params.groupMember,
+                                      to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members/${params.groupMember}`,
+                                    },
+                                    { label: 'Edit Group Member' },
+                                  ],
+                                }),
                                 async lazy() {
                                   return {
                                     Component: (await EditGroupMemberPage()).EditGroupMemberPage,
@@ -238,15 +584,75 @@ export const router = createBrowserRouter([
                               },
                               {
                                 path: 'group-member-events',
-                                async lazy() {
-                                  return {
-                                    Component: (await GroupMemberEventsPage())
-                                      .GroupMemberEventsPage,
-                                  };
-                                },
+                                element: <Outlet />,
                                 children: [
                                   {
+                                    path: '/relays/:relay/groups/:groupId/group-members/:group-member/group-member-events',
+                                    loader: ({ params }) => ({
+                                      crumbs: [
+                                        { label: 'Relays', to: '/relays' },
+                                        {
+                                          label: params.relay,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                        },
+                                        {
+                                          label: 'Groups',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                        },
+                                        {
+                                          label: params.groupId,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                        },
+                                        {
+                                          label: 'Group Members',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members`,
+                                        },
+                                        {
+                                          label: params.groupMember,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members/${params.groupMember}`,
+                                        },
+                                        { label: 'Group Member Events' },
+                                      ],
+                                    }),
+                                    async lazy() {
+                                      return {
+                                        Component: (await GroupMemberEventsPage())
+                                          .GroupMemberEventsPage,
+                                      };
+                                    },
+                                  },
+                                  {
                                     path: ':group-member-event',
+                                    loader: ({ params }) => ({
+                                      crumbs: [
+                                        { label: 'Relays', to: '/relays' },
+                                        {
+                                          label: params.relay,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                        },
+                                        {
+                                          label: 'Groups',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                        },
+                                        {
+                                          label: params.groupId,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                        },
+                                        {
+                                          label: 'Group Members',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members`,
+                                        },
+                                        {
+                                          label: params.groupMember,
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members/${params.groupMember}`,
+                                        },
+                                        {
+                                          label: 'Group Member Events',
+                                          to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-members/${params.groupMember}/group-member-events`,
+                                        },
+                                        { label: params.groupMemberEvent },
+                                      ],
+                                    }),
                                     async lazy() {
                                       return {
                                         Component: (await GroupMemberEventPage())
@@ -262,18 +668,84 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: 'group-events',
-                        async lazy() {
-                          return { Component: (await GroupEventsPage()).GroupEventsPage };
-                        },
+                        element: <Outlet />,
                         children: [
                           {
+                            path: '/relays/:relay/groups/:groupId/group-events',
+                            loader: ({ params }) => ({
+                              crumbs: [
+                                { label: 'Relays', to: '/relays' },
+                                {
+                                  label: params.relay,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                },
+                                {
+                                  label: 'Groups',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                },
+                                {
+                                  label: params.groupId,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                },
+                                { label: 'Group Events' },
+                              ],
+                            }),
+                            async lazy() {
+                              return { Component: (await GroupEventsPage()).GroupEventsPage };
+                            },
+                          },
+                          {
                             path: 'new-group-event',
+                            loader: ({ params }) => ({
+                              crumbs: [
+                                { label: 'Relays', to: '/relays' },
+                                {
+                                  label: params.relay,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                },
+                                {
+                                  label: 'Groups',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                },
+                                {
+                                  label: params.groupId,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                },
+                                {
+                                  label: 'Group Events',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-events`,
+                                },
+                                { label: 'New Group Event' },
+                              ],
+                            }),
                             async lazy() {
                               return { Component: (await NewGroupEventPage()).NewGroupEventPage };
                             },
                           },
                           {
                             path: ':group-event',
+                            loader: ({ params }) => ({
+                              crumbs: [
+                                { label: 'Relays', to: '/relays' },
+                                {
+                                  label: params.relay,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                                },
+                                {
+                                  label: 'Groups',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                                },
+                                {
+                                  label: params.groupId,
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                                },
+                                {
+                                  label: 'Group Events',
+                                  to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}/group-events`,
+                                },
+                                { label: params.groupEvent },
+                              ],
+                            }),
                             async lazy() {
                               return { Component: (await GroupEventPage()).GroupEventPage };
                             },

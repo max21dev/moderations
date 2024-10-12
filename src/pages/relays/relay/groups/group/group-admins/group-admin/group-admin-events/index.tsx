@@ -1,11 +1,17 @@
-import { Outlet } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
+
+import { Breadcrumbs } from '@/features/breadcrumbs';
+
+import { LoaderData } from '@/shared/types';
 
 export const GroupAdminEventsPage = () => {
-  return (
-    <div>
-      <h1>Group Admin Events Page</h1>
+  const { crumbs } = useLoaderData() as LoaderData;
 
-      <Outlet />
-    </div>
+  return (
+    <>
+      <Breadcrumbs crumbs={crumbs} />
+
+      <h1>Group Admin Events Page</h1>
+    </>
   );
 };

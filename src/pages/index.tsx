@@ -16,7 +16,7 @@ export const HomePage = () => {
   return null;
 };
 
-export const Layout = () => {
+export const HomeLayout = () => {
   const { globalNdk } = useGlobalNdk();
 
   const { setIsLoginModalOpen } = useLoginModalState();
@@ -34,7 +34,7 @@ export const Layout = () => {
     <div className="w-full h-full">
       <Navbar />
 
-      <div className="mx-auto max-w-screen-lg">
+      <div className="mx-auto max-w-screen-lg py-4">
         <Outlet />
       </div>
     </div>
