@@ -6,4 +6,5 @@ export { useGroupMembers } from './use-group-members';
 export { useGroups } from './use-groups';
 export { useLoginModalState } from './use-login-modal-state';
 export { useNip29Ndk } from './use-nip29-ndk';
+export { useRelaysList } from './use-relays-list';
 export { useZapModalState } from './use-zap-modal-state';
