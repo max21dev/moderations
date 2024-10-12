@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar.tsx';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import {
   Tooltip,
   TooltipContent,
@@ -7,6 +7,7 @@ import {
 } from '@/shared/components/ui/tooltip';
 
 import { loader } from '@/shared/utils';
+
 import { useUserAvatar } from './hooks';
 
 export function UserAvatar({ pubkey }: { pubkey: string }) {
@@ -18,7 +19,9 @@ export function UserAvatar({ pubkey }: { pubkey: string }) {
         <TooltipTrigger asChild>
           <Avatar className="flex justify-center items-center">
             {!profile || !profile.image ? (
-              <AvatarFallback>{pubkey.slice(0, 2).toUpperCase()}</AvatarFallback>
+              <AvatarFallback className="bg-purple-900">
+                {pubkey.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
             ) : (
               <AvatarImage src={loader(profile?.image, { w: 50, h: 50 })} alt={profile?.name} />
             )}
