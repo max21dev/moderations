@@ -11,10 +11,10 @@ import {
   TableRow,
 } from '@/shared/components/ui/table';
 
-import { useStore } from '@/shared/store';
+import { useRelaysList } from '@/shared/hooks';
 
 export const RelaysList = () => {
-  const relays = useStore((state) => state.relays);
+  const { relays } = useRelaysList();
 
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ export const RelaysList = () => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">ADDRESS</TableHead>
+          <TableHead className="w-[100px]">URL</TableHead>
           <TableHead>STATUS</TableHead>
           <TableHead>ABOUT</TableHead>
           <TableHead className="text-right"></TableHead>
