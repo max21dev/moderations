@@ -5,6 +5,8 @@ import { Button } from '@/shared/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover';
 import { H3 } from '@/shared/components/ui/typography/h3';
 
+import { ModeToggle } from '@/shared/components/mode-toggle';
+
 import { useGlobalNdk } from '@/shared/hooks';
 
 import { UserAvatar } from '@/features/users';
@@ -24,14 +26,15 @@ export const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <Button variant="ghost" className="gap-2" asChild>
+            <ModeToggle />
+
+            <Button variant="ghost" size="icon" asChild>
               <a
                 href="https://github.com/max21dev/moderations"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <GitHubLogoIcon />
-                <span>GitHub</span>
+                <GitHubLogoIcon className="h-5 w-5" />
               </a>
             </Button>
 
