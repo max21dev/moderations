@@ -1,8 +1,9 @@
-import { EmptyRelays, RelaysList } from '@/features/relays';
 import { Button } from '@/shared/components/ui/button';
 import { H3 } from '@/shared/components/ui/typography/h3';
 
 import { useRelaysList } from '@/shared/hooks';
+
+import { EmptyRelays, RelaysList } from '@/features/relays';
 
 export const RelaysPage = () => {
   const { relays } = useRelaysList();
