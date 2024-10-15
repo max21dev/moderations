@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +17,9 @@ export const Breadcrumbs = ({ crumbs }: { crumbs: { to?: string; label: string }
           <BreadcrumbItem key={index}>
             {crumb.to ? (
               <>
-                <BreadcrumbLink href={crumb.to}>{crumb.label}</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link to={crumb.to}>{crumb.label}</Link>
+                </BreadcrumbLink>
                 <BreadcrumbSeparator />
               </>
             ) : (

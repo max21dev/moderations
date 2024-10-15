@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import { Button } from '@/shared/components/ui/button';
 
 export const EmptyRelays = () => {
@@ -12,7 +14,7 @@ export const EmptyRelays = () => {
       </div>
 
       <Button className="mx-auto mt-8" asChild>
-        <a href="/relays/new-relay">Add New Relay</a>
+        <Link to="/relays/new-relay">Add New Relay</Link>
       </Button>
     </div>
   );
