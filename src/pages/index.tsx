@@ -34,7 +34,7 @@ export const HomeLayout = () => {
     <div className="w-full h-full">
       <Navbar />
 
-      <div className="mx-auto max-w-screen-lg py-4">
+      <div className="mx-auto max-w-screen-lg p-4">
         <Outlet />
       </div>
     </div>

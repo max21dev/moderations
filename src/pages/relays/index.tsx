@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import { Button } from '@/shared/components/ui/button';
 import { H3 } from '@/shared/components/ui/typography/h3';
 
@@ -16,7 +18,7 @@ export const RelaysPage = () => {
         <H3>Relays</H3>
 
         <Button className="ml-auto" variant="outline" asChild>
-          <a href="/relays/new-relay">Add New Relay</a>
+          <Link to="/relays/new-relay">Add New Relay</Link>
         </Button>
       </div>
 
