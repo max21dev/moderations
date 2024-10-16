@@ -29,7 +29,7 @@ export const RelaysListItem = ({ relay }: { relay: string }) => {
           <div className="w-16 h-16 bg-secondary rounded-md overflow-hidden">
             {info.icon && (
               <img
-                src={loader(info.icon, { w: 16, h: 16 })}
+                src={loader(info.icon, { w: 64, h: 64 })}
                 alt={info.name}
                 className="w-full h-full"
               />
