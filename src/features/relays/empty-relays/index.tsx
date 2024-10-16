@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
-import { Button } from '@/shared/components/ui/button';
+// import { Button } from '@/shared/components/ui/button';
 
 export const EmptyRelays = () => {
   return (
@@ -13,9 +13,9 @@ export const EmptyRelays = () => {
         <p className="text-muted-foreground">Add a new relay to get started</p>
       </div>
 
-      <Button className="mx-auto mt-8" asChild>
+      {/* <Button className="mx-auto mt-8" asChild>
         <Link to="/relays/new-relay">Add New Relay</Link>
-      </Button>
+      </Button> */}
     </div>
   );
 };

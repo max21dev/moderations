@@ -11,10 +11,6 @@ import { EmptyRelays, RelaysList } from '@/features/relays';
 export const RelaysPage = () => {
   const { relays, isLoading } = useRelaysList();
 
-  if (isLoading) return <Spinner />;
-
-  if (relays.length === 0) return <EmptyRelays />;
-
   return (
     <>
       <div className="mb-4 w-full flex items-center">
@@ -25,7 +21,7 @@ export const RelaysPage = () => {
         </Button>
       </div>
 
-      <RelaysList />
+      {isLoading ? <Spinner /> : relays.length == 0 ? <EmptyRelays /> : <RelaysList />}
     </>
   );
 };
