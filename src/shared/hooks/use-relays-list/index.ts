@@ -5,6 +5,7 @@ import { useGlobalNdk } from '@/shared/hooks';
 
 export const useRelaysList = () => {
   const [relays, setRelays] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { globalNdk } = useGlobalNdk();
 
@@ -23,7 +24,7 @@ export const useRelaysList = () => {
     [filters, activeUser, globalNdk],
   );
 
-  const { events } = useSubscribe(params);
+  const { events, eose } = useSubscribe(params);
 
   useEffect(() => {
     if (!events || events.length == 0) return;
@@ -33,5 +34,13 @@ export const useRelaysList = () => {
     setRelays(relays || []);
   }, [events, setRelays]);
 
-  return { relays };
+  useEffect(() => {
+    if (events && events.length > 0) {
+      setIsLoading(false);
+    } else {
+      setIsLoading(!eose);
+    }
+  }, [events, eose]);
+
+  return { relays, isLoading };
 };
