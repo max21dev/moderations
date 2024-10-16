@@ -1,15 +1,17 @@
 import { useSubscribe } from 'nostr-hooks';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useNip29Ndk } from '@/shared/hooks';
 import { Group } from '@/shared/types';
 
 const filters = [{ kinds: [39000], limit: 100 }];
 
-export const useGroups = () => {
+export const useGroupsList = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const { nip29Ndk } = useNip29Ndk();
 
-  const { events: groupsEvents } = useSubscribe(
+  const { events: groupsEvents, eose } = useSubscribe(
     useMemo(() => ({ filters, customNdk: nip29Ndk }), [nip29Ndk]),
   );
 
@@ -36,5 +38,13 @@ export const useGroups = () => {
     [groupsEvents],
   );
 
-  return { groups };
+  useEffect(() => {
+    if (groups && groups.length > 0) {
+      setIsLoading(false);
+    } else {
+      setIsLoading(!eose);
+    }
+  }, [groups, eose]);
+
+  return { groups, isLoading };
 };
