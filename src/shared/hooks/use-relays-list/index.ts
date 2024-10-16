@@ -4,35 +4,29 @@ import { useEffect, useMemo, useState } from 'react';
 import { useGlobalNdk } from '@/shared/hooks';
 
 export const useRelaysList = () => {
-  const [relays, setRelays] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const { globalNdk } = useGlobalNdk();
 
   const { activeUser } = useActiveUser({ customNdk: globalNdk });
 
-  const filters = useMemo(
-    () =>
-      activeUser
-        ? [{ authors: [activeUser.pubkey], kinds: [30078], '#d': ['moderations/relays'] }]
-        : [],
-    [activeUser],
+  const { events, eose } = useSubscribe(
+    useMemo(
+      () => ({
+        filters: activeUser
+          ? [{ authors: [activeUser.pubkey], kinds: [30078], '#d': ['moderations/relays'] }]
+          : [],
+        enabled: !!activeUser,
+        customNdk: globalNdk,
+      }),
+      [activeUser, globalNdk],
+    ),
   );
 
-  const params = useMemo(
-    () => ({ filters, enabled: !!activeUser, customNdk: globalNdk }),
-    [filters, activeUser, globalNdk],
+  const relays = useMemo(
+    () => (events && events.length > 0 ? events[0].getMatchingTags('r')?.map((t) => t[1]) : []),
+    [events],
   );
-
-  const { events, eose } = useSubscribe(params);
-
-  useEffect(() => {
-    if (!events || events.length == 0) return;
-
-    const relays = events[0].getMatchingTags('r')?.map((t) => t[1]);
-
-    setRelays(relays || []);
-  }, [events, setRelays]);
 
   useEffect(() => {
     if (events && events.length > 0) {
