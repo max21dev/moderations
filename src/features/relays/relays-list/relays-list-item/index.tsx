@@ -29,7 +29,7 @@ export const RelaysListItem = ({ relay }: { relay: string }) => {
           <div className="w-16 h-16 bg-secondary rounded-md overflow-hidden">
             {info.icon && (
               <img
-                src={loader(info.icon, { w: 16, h: 16 })}
+                src={loader(info.icon, { w: 64, h: 64 })}
                 alt={info.name}
                 className="w-full h-full"
               />
@@ -64,9 +64,9 @@ export const RelaysListItem = ({ relay }: { relay: string }) => {
             </DialogContent>
           </Dialog>
 
-          <Link to={`/relays/${encodeURIComponent(relay)}`}>
-            <Button size="icon">
-              <ArrowRightIcon size={16} />
+          <Link to={`${location.pathname}/${encodeURIComponent(relay)}/groups`}>
+            <Button size="sm">
+              View Groups <ArrowRightIcon size={16} className="ml-2" />
             </Button>
           </Link>
         </div>

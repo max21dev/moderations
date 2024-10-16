@@ -1,21 +1,31 @@
 import NDK from '@nostr-dev-kit/ndk';
 import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
 import { useEffect } from 'react';
-import { Outlet, useLoaderData, useParams } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
+
+import { Button } from '@/shared/components/ui/button';
+import { H3 } from '@/shared/components/ui/typography/h3';
 
 import { Breadcrumbs } from '@/features/breadcrumbs';
 
 import { useGlobalNdk, useNip29Ndk } from '@/shared/hooks';
-import { LoaderData } from '@/shared/types';
 
 export const RelayPage = () => {
-  const { crumbs } = useLoaderData() as LoaderData;
-
   return (
     <>
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs />
 
-      <h5>Relay Page</h5>
+      <div className="mb-4 w-full flex items-center">
+        <H3>Relay</H3>
+
+        <Button className="ml-auto mr-2" variant="outline" asChild>
+          <Link to={`${location.pathname}/edit-relay`}>Edit Relay</Link>
+        </Button>
+
+        <Button asChild>
+          <Link to={`${location.pathname}/groups`}>View Groups</Link>
+        </Button>
+      </div>
     </>
   );
 };

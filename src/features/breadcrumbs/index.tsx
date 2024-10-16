@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
 import {
   Breadcrumb,
@@ -10,7 +10,11 @@ import {
   BreadcrumbSeparator,
 } from '@/shared/components/ui/breadcrumb';
 
-export const Breadcrumbs = ({ crumbs }: { crumbs: { to?: string; label: string }[] }) => {
+import { LoaderData } from '@/shared/types';
+
+export const Breadcrumbs = () => {
+  const { crumbs } = useLoaderData() as LoaderData;
+
   return (
     <Breadcrumb className="mb-4">
       <BreadcrumbList>

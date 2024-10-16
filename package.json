@@ -48,7 +48,7 @@
     "cmdk": "^0.2.1",
     "date-fns": "^3.3.1",
     "embla-carousel-react": "^8.0.0-rc19",
-    "lucide-react": "^0.314.0",
+    "lucide-react": "^0.453.0",
     "next-themes": "^0.2.1",
     "nostr-hooks": "^2.9.10",
     "nostr-tools": "^2.7.0",

@@ -19,7 +19,7 @@ export function UserAvatar({ pubkey }: { pubkey: string }) {
         <TooltipTrigger asChild>
           <Avatar className="flex justify-center items-center">
             {!profile || !profile.image ? (
-              <AvatarFallback className="bg-purple-900">
+              <AvatarFallback className="bg-purple-600/50">
                 {pubkey.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             ) : (
