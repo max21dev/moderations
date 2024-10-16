@@ -15,7 +15,7 @@ export const GroupsPage = () => {
         <H3>Groups</H3>
 
         <Button className="ml-auto" variant="outline" asChild>
-          <Link to="/relays/new-relay">Add New Relay</Link>
+          <Link to={`${location.pathname}/new-group`}>Create New Group</Link>
         </Button>
       </div>
 

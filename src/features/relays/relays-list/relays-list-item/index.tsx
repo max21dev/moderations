@@ -64,7 +64,7 @@ export const RelaysListItem = ({ relay }: { relay: string }) => {
             </DialogContent>
           </Dialog>
 
-          <Link to={`/relays/${encodeURIComponent(relay)}/groups`}>
+          <Link to={`${location.pathname}/${encodeURIComponent(relay)}/groups`}>
             <Button size="sm">
               View Groups <ArrowRightIcon size={16} className="ml-2" />
             </Button>

@@ -12,7 +12,7 @@ export const RelaysPage = () => {
         <H3>Relays</H3>
 
         <Button className="ml-auto" variant="outline" asChild>
-          <Link to="/relays/new-relay">Add New Relay</Link>
+          <Link to={`${location.pathname}/new-relay`}>Add New Relay</Link>
         </Button>
       </div>
 
