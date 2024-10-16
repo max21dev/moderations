@@ -79,7 +79,7 @@ export const GroupsListItem = ({ group }: { group: Group }) => {
           <Dialog>
             <DialogTrigger asChild>
               <Button size="sm" variant="outline">
-                Raw Information
+                View Raw Information
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-screen-md">
