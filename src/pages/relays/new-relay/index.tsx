@@ -1,6 +1,5 @@
 import { useNewEvent } from 'nostr-hooks';
 import { useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
@@ -9,7 +8,6 @@ import { H3 } from '@/shared/components/ui/typography/h3';
 import { useToast } from '@/shared/components/ui/use-toast';
 
 import { useGlobalNdk, useRelaysList } from '@/shared/hooks';
-import { LoaderData } from '@/shared/types';
 
 import { Breadcrumbs } from '@/features/breadcrumbs';
 
@@ -17,8 +15,6 @@ export const NewRelayPage = () => {
   const [inputValue, setInputValue] = useState('');
 
   const { toast } = useToast();
-
-  const { crumbs } = useLoaderData() as LoaderData;
 
   const { relays } = useRelaysList();
   const { globalNdk } = useGlobalNdk();
@@ -61,7 +57,7 @@ export const NewRelayPage = () => {
 
   return (
     <>
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs />
 
       <H3>Add New Relay</H3>
 
