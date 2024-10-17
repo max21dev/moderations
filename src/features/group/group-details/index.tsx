@@ -1,8 +1,17 @@
+import { ArrowRightIcon } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
+
+import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent, CardDescription } from '@/shared/components/ui/card';
+import { Separator } from '@/shared/components/ui/separator';
+import { H3 } from '@/shared/components/ui/typography/h3';
+import { Muted } from '@/shared/components/ui/typography/muted';
+
 import { UserInfoRow } from '@/features/users';
 
-import { useGroupDetails } from './hooks';
 import { loader } from '@/shared/utils';
-import { useParams } from 'react-router-dom';
+
+import { useGroupDetails } from './hooks';
 
 export const GroupDetails = () => {
   const { groupId } = useParams();
@@ -12,38 +21,72 @@ export const GroupDetails = () => {
   if (!groupId) return null;
 
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="flex flex-col items-center min-h-3">
-        {group?.picture && (
-          <img alt={group?.picture} src={loader(group?.picture, { w: 50, h: 50 })} />
-        )}
+    <>
+      <div className="mb-4 w-full flex items-center">
+        <div className="flex items-center gap-2">
+          <div className="bg-secondary w-12 h-12 rounded-md overflow-hidden">
+            {group && group.picture && (
+              <img alt={group.name} src={loader(group.picture, { w: 48, h: 48 })} />
+            )}
+          </div>
 
-        <div className="text-sm font-light mt-2">{group?.id}</div>
-        <div className="text-lg font-medium">{group?.name}</div>
-        <div className="text-sm text-gray-600 mb-4">{group?.about}</div>
-      </div>
-      <div className="m-0">
-        {admins && (
           <div>
-            <h5 className="font-medium pb-2 m-4 border-b-2 border-b-blue-100">
-              Admins ({admins.length})
-            </h5>
-            {admins.map((admin) => (
-              <UserInfoRow pubkey={admin.publicKey} key={admin.publicKey} />
-            ))}
+            <H3>{group?.name || '-No Name-'}</H3>
+
+            {group && group.about && <Muted>{group.about}</Muted>}
           </div>
-        )}
-        {members && (
-          <div>
-            <h5 className="font-medium pb-2 m-4 border-b-2 border-b-blue-100">
-              Members ({members.length})
-            </h5>
-            {members.map((member) => (
-              <UserInfoRow pubkey={member.publicKey} key={member.publicKey} />
-            ))}
-          </div>
-        )}
+        </div>
+
+        <Button className="ml-auto" variant="outline" asChild>
+          <Link to={`${location.pathname}/edit-group`}>Edit Group</Link>
+        </Button>
       </div>
-    </div>
+
+      <div className="flex gap-4 w-full h-full">
+        <Card className="w-full transition-colors duration-300 hover:border-purple-600">
+          <CardContent className="flex flex-col gap-4">
+            <div className="p-4 pb-0 text-xl font-semibold">Admins ({admins.length})</div>
+
+            <Separator />
+
+            <CardDescription>
+              {admins.slice(0, 5).map((admin) => (
+                <UserInfoRow key={admin.publicKey} pubkey={admin.publicKey} />
+              ))}
+            </CardDescription>
+
+            {admins.length > 5 && (
+              <Link to={`${location.pathname}/group-admins`}>
+                <Button variant="ghost" size="sm">
+                  View All Admins <ArrowRightIcon className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="w-full transition-colors duration-300 hover:border-purple-600">
+          <CardContent className="flex flex-col gap-4">
+            <div className="p-4 pb-0 text-xl font-semibold">Members ({members.length})</div>
+
+            <Separator />
+
+            <CardDescription>
+              {members.slice(0, 5).map((member) => (
+                <UserInfoRow pubkey={member.publicKey} key={member.publicKey} />
+              ))}
+            </CardDescription>
+
+            {members.length > 5 && (
+              <Link to={`${location.pathname}/group-members`}>
+                <Button variant="ghost" size="sm">
+                  View All Members <ArrowRightIcon className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
