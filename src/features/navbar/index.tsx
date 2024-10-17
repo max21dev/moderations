@@ -20,7 +20,7 @@ export const Navbar = () => {
     <>
       <div className="bg-secondary w-full h-14">
         <div className="mx-auto h-full w-full max-w-screen-xl flex items-center justify-between px-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 overflow-hidden">
             <img src={'/moderations.svg'} alt="nip-29 moderations logo" className="h-8" />
             <H3>Moderations</H3>
           </div>
