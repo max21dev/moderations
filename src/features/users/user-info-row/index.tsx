@@ -6,7 +6,10 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip.tsx';
 
+import { ellipsis } from '@/shared/utils';
+
 import { useUserInfoRow } from './hooks';
+import { NDKUser } from '@nostr-dev-kit/ndk';
 
 export function UserInfoRow({ pubkey }: { pubkey: string }) {
   const { profile } = useUserInfoRow({ pubkey });
@@ -29,11 +32,11 @@ export function UserInfoRow({ pubkey }: { pubkey: string }) {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+
       <div className="flex flex-col">
-        <span className="text-sm h-4 text-gray-500">{profile?.name}</span>
         <span className="text-sm">{profile?.displayName}</span>
-        <span className="text-sm">{profile?.bio}</span>
-        <span className="text-sm text-gray-500">{pubkey}</span>
+        {/* <span className="text-sm">{profile?.bio}</span> */}
+        <span className="text-sm text-gray-500">{ellipsis(new NDKUser({ pubkey }).npub, 10)}</span>
       </div>
     </div>
   );
