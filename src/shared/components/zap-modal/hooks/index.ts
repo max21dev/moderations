@@ -72,7 +72,7 @@ export const useZapModal = () => {
     process,
     isZapModalOpen,
     setIsZapModalOpen,
-    displayName: profile?.displayName,
+    displayName: profile?.displayName || profile?.name,
     image: profile?.image,
   };
 };
