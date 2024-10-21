@@ -1,43 +1,46 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar.tsx';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/shared/components/ui/tooltip.tsx';
+} from '@/shared/components/ui/tooltip';
 
 import { ellipsis } from '@/shared/utils';
 
 import { useUserInfoRow } from './hooks';
-import { NDKUser } from '@nostr-dev-kit/ndk';
 
 export function UserInfoRow({ pubkey }: { pubkey: string }) {
-  const { profile } = useUserInfoRow({ pubkey });
+  const { name, image, npub } = useUserInfoRow({ pubkey });
 
   return (
-    <div className="flex items-center gap-4 p-2">
+    <a
+      className="flex items-center gap-4 p-2"
+      href={`https://njump.me/${npub}`}
+      target="_blank"
+      rel="noreferrer"
+    >
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Avatar className="flex justify-center items-center">
-              {!profile || !profile?.image ? (
+              {!image ? (
                 <AvatarFallback>{pubkey.slice(0, 2).toUpperCase()}</AvatarFallback>
               ) : (
-                <AvatarImage src={profile?.image} alt={profile?.name} />
+                <AvatarImage src={image} alt={name} />
               )}
             </Avatar>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{profile?.name ? profile?.name : pubkey}</p>
+            <p>{name}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
 
       <div className="flex flex-col">
-        <span className="text-sm">{profile?.displayName}</span>
-        {/* <span className="text-sm">{profile?.bio}</span> */}
-        <span className="text-sm text-gray-500">{ellipsis(new NDKUser({ pubkey }).npub, 10)}</span>
+        <span className="text-sm">{name}</span>
+        <span className="text-sm text-gray-500">{ellipsis(npub, 10)}</span>
       </div>
-    </div>
+    </a>
   );
 }

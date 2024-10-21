@@ -31,7 +31,7 @@ export const GroupDetails = () => {
           </div>
 
           <div>
-            <H3>{group?.name || '-No Name-'}</H3>
+            <H3>{group?.name || '<unnamed>'}</H3>
 
             {group && group.about && <Muted>{group.about}</Muted>}
           </div>
@@ -45,7 +45,13 @@ export const GroupDetails = () => {
       <div className="flex gap-4 w-full h-full">
         <Card className="w-full transition-colors duration-300 hover:border-purple-600">
           <CardContent className="flex flex-col gap-4">
-            <div className="p-4 pb-0 text-xl font-semibold">Admins ({admins.length})</div>
+            <div className="pt-4">
+              <Link to={`${location.pathname}/group-admins`}>
+                <Button className="text-xl font-semibold" variant="link">
+                  Admins ({admins.length})
+                </Button>
+              </Link>
+            </div>
 
             <Separator />
 
@@ -67,7 +73,13 @@ export const GroupDetails = () => {
 
         <Card className="w-full transition-colors duration-300 hover:border-purple-600">
           <CardContent className="flex flex-col gap-4">
-            <div className="p-4 pb-0 text-xl font-semibold">Members ({members.length})</div>
+            <div className="pt-4">
+              <Link to={`${location.pathname}/group-members`}>
+                <Button className="text-xl font-semibold" variant="link">
+                  Members ({members.length})
+                </Button>
+              </Link>
+            </div>
 
             <Separator />
 
