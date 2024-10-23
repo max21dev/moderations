@@ -41,6 +41,7 @@ export const useGroup = (groupId: string | undefined) => {
       about: aboutTag ? aboutTag[1] : '',
       picture: pictureTag ? pictureTag[1] : '',
       event: groupEvent,
+      relay: groupEvent.relay?.url || '',
     } as Group;
   }, [groupsEvents]);
 

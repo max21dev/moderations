@@ -10,6 +10,7 @@ export type Group = {
   admins: GroupAdmin[];
   members: GroupMember[];
   event: NDKEvent;
+  relay: string;
 };
 
 export type GroupAdmin = {
