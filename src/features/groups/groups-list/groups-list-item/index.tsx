@@ -11,10 +11,10 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
 
+import { InformationDialog } from '@/shared/components/information-dialog';
+
 import { Group } from '@/shared/types';
 import { loader } from '@/shared/utils';
-
-import { InformationDialog } from './information-dialog';
 
 export const GroupsListItem = ({ group }: { group: Group }) => {
   const groupHost = useMemo(
