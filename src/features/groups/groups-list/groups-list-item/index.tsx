@@ -1,16 +1,9 @@
 import { ArrowRightIcon, EyeClosedIcon, EyeIcon, LockIcon, LockOpenIcon } from 'lucide-react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent } from '@/shared/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/shared/components/ui/dialog';
 import {
   Tooltip,
   TooltipContent,
@@ -21,7 +14,14 @@ import {
 import { Group } from '@/shared/types';
 import { loader } from '@/shared/utils';
 
+import { InformationDialog } from './information-dialog';
+
 export const GroupsListItem = ({ group }: { group: Group }) => {
+  const groupHost = useMemo(
+    () => group.relay.replace('wss://', '').replace('ws://', '').replace('/', ''),
+    [group.relay],
+  );
+
   return (
     <Card className="transition-colors duration-300 hover:border-purple-600">
       <CardContent className="mt-4 flex flex-col gap-4">
@@ -75,26 +75,22 @@ export const GroupsListItem = ({ group }: { group: Group }) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button size="sm" variant="outline">
-                View Raw Information
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-screen-md">
-              <DialogHeader>
-                <DialogTitle>Raw Information</DialogTitle>
-                <DialogDescription>This is the raw information of the group.</DialogDescription>
-              </DialogHeader>
+        <div className="flex items-center gap-4">
+          <InformationDialog
+            buttonLabel="View Raw Information"
+            title="Raw Information"
+            description="This is the raw information of the group."
+            content={JSON.stringify(group.event.rawEvent(), null, 2)}
+          />
 
-              <div className="overflow-auto">
-                <pre className="text-xs">{JSON.stringify(group.event.rawEvent(), null, 2)}</pre>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <InformationDialog
+            buttonLabel="View Group Identifier"
+            title="Group Identifier"
+            description="This is the identifier of the group."
+            content={`${groupHost}'${group.id}`}
+          />
 
-          <Link to={`${location.pathname}/${encodeURIComponent(group.id)}`}>
+          <Link to={`${location.pathname}/${encodeURIComponent(group.id)}`} className="ml-auto">
             <Button size="sm">
               <ArrowRightIcon size={16} />
             </Button>
