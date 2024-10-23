@@ -15,7 +15,7 @@ export function UserInfoRow({ pubkey }: { pubkey: string }) {
 
   return (
     <a
-      className="flex items-center gap-4 p-2"
+      className="flex items-center gap-4 p-2 group"
       href={`https://njump.me/${npub}`}
       target="_blank"
       rel="noreferrer"
@@ -37,7 +37,7 @@ export function UserInfoRow({ pubkey }: { pubkey: string }) {
         </Tooltip>
       </TooltipProvider>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col group-hover:underline">
         <span className="text-sm">{name}</span>
         <span className="text-sm text-gray-500">{ellipsis(npub, 10)}</span>
       </div>
