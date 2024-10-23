@@ -6,13 +6,12 @@ import { Button } from '@/shared/components/ui/button';
 import { H3 } from '@/shared/components/ui/typography/h3';
 import { Muted } from '@/shared/components/ui/typography/muted';
 
+import { CardContainer } from '@/shared/components/card-container';
 import { InformationDialog } from '@/shared/components/information-dialog';
 
 import { UserInfoRow } from '@/features/users';
 
 import { loader } from '@/shared/utils';
-
-import { CardContainer } from './card-container';
 
 import { useGroupDetails } from './hooks';
 
