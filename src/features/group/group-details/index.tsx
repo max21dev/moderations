@@ -1,15 +1,18 @@
 import { ArrowRightIcon } from 'lucide-react';
+import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent, CardDescription } from '@/shared/components/ui/card';
-import { Separator } from '@/shared/components/ui/separator';
 import { H3 } from '@/shared/components/ui/typography/h3';
 import { Muted } from '@/shared/components/ui/typography/muted';
+
+import { InformationDialog } from '@/shared/components/information-dialog';
 
 import { UserInfoRow } from '@/features/users';
 
 import { loader } from '@/shared/utils';
+
+import { CardContainer } from './card-container';
 
 import { useGroupDetails } from './hooks';
 
@@ -17,6 +20,11 @@ export const GroupDetails = () => {
   const { groupId } = useParams();
 
   const { admins, group, members } = useGroupDetails({ groupId });
+
+  const groupHost = useMemo(
+    () => (group ? group.relay.replace('wss://', '').replace('ws://', '').replace('/', '') : ''),
+    [group],
+  );
 
   if (!groupId) return null;
 
@@ -42,24 +50,33 @@ export const GroupDetails = () => {
         </Button>
       </div>
 
-      <div className="flex gap-4 w-full h-full">
-        <Card className="w-full transition-colors duration-300 hover:border-purple-600">
-          <CardContent className="flex flex-col gap-4">
-            <div className="pt-4">
-              <Link to={`${location.pathname}/group-admins`}>
-                <Button className="text-xl font-semibold" variant="link">
-                  Admins ({admins.length})
-                </Button>
-              </Link>
-            </div>
+      <div className="flex flex-col gap-4">
+        {group && (
+          <CardContainer title="Information">
+            <InformationDialog
+              buttonLabel="View Raw Information"
+              title="Raw Information"
+              description="This is the raw information of the group."
+              content={JSON.stringify(group.event.rawEvent(), null, 2)}
+            />
 
-            <Separator />
+            <InformationDialog
+              buttonLabel="View Group Identifier"
+              title="Group Identifier"
+              description="This is the identifier of the group."
+              content={`${groupHost}'${group.id}`}
+            />
+          </CardContainer>
+        )}
 
-            <CardDescription>
-              {admins.slice(0, 5).map((admin) => (
-                <UserInfoRow key={admin.publicKey} pubkey={admin.publicKey} />
-              ))}
-            </CardDescription>
+        <div className="flex gap-4 w-full h-full">
+          <CardContainer
+            title={`Admins (${admins.length})`}
+            linkTo={`${location.pathname}/group-admins`}
+          >
+            {admins.slice(0, 5).map((admin) => (
+              <UserInfoRow key={admin.publicKey} pubkey={admin.publicKey} />
+            ))}
 
             {admins.length > 5 && (
               <Link to={`${location.pathname}/group-admins`}>
@@ -68,26 +85,15 @@ export const GroupDetails = () => {
                 </Button>
               </Link>
             )}
-          </CardContent>
-        </Card>
+          </CardContainer>
 
-        <Card className="w-full transition-colors duration-300 hover:border-purple-600">
-          <CardContent className="flex flex-col gap-4">
-            <div className="pt-4">
-              <Link to={`${location.pathname}/group-members`}>
-                <Button className="text-xl font-semibold" variant="link">
-                  Members ({members.length})
-                </Button>
-              </Link>
-            </div>
-
-            <Separator />
-
-            <CardDescription>
-              {members.slice(0, 5).map((member) => (
-                <UserInfoRow pubkey={member.publicKey} key={member.publicKey} />
-              ))}
-            </CardDescription>
+          <CardContainer
+            title={`Members (${members.length})`}
+            linkTo={`${location.pathname}/group-members`}
+          >
+            {members.slice(0, 5).map((member) => (
+              <UserInfoRow pubkey={member.publicKey} key={member.publicKey} />
+            ))}
 
             {members.length > 5 && (
               <Link to={`${location.pathname}/group-members`}>
@@ -96,8 +102,8 @@ export const GroupDetails = () => {
                 </Button>
               </Link>
             )}
-          </CardContent>
-        </Card>
+          </CardContainer>
+        </div>
       </div>
     </>
   );
