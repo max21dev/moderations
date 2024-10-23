@@ -33,6 +33,7 @@ export const useGroupsList = () => {
               type: e.getMatchingTags('open') ? 'open' : 'closed',
               picture: e.getMatchingTags('picture')?.[0]?.[1] || '',
               event: e,
+              relay: e.relay?.url || '',
             }) as Group,
         ),
     [groupsEvents],
