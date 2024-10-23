@@ -6,13 +6,12 @@ import { Button } from '@/shared/components/ui/button';
 import { H3 } from '@/shared/components/ui/typography/h3';
 import { Muted } from '@/shared/components/ui/typography/muted';
 
+import { CardContainer } from '@/shared/components/card-container';
 import { InformationDialog } from '@/shared/components/information-dialog';
 
 import { UserInfoRow } from '@/features/users';
 
 import { loader } from '@/shared/utils';
-
-import { CardContainer } from './card-container';
 
 import { useGroupDetails } from './hooks';
 
@@ -53,19 +52,21 @@ export const GroupDetails = () => {
       <div className="flex flex-col gap-4">
         {group && (
           <CardContainer title="Information">
-            <InformationDialog
-              buttonLabel="View Raw Information"
-              title="Raw Information"
-              description="This is the raw information of the group."
-              content={JSON.stringify(group.event.rawEvent(), null, 2)}
-            />
+            <div className="flex gap-4">
+              <InformationDialog
+                buttonLabel="View Raw Information"
+                title="Raw Information"
+                description="This is the raw information of the group."
+                content={JSON.stringify(group.event.rawEvent(), null, 2)}
+              />
 
-            <InformationDialog
-              buttonLabel="View Group Identifier"
-              title="Group Identifier"
-              description="This is the identifier of the group."
-              content={`${groupHost}'${group.id}`}
-            />
+              <InformationDialog
+                buttonLabel="View Group Identifier"
+                title="Group Identifier"
+                description="This is the identifier of the group."
+                content={`${groupHost}'${group.id}`}
+              />
+            </div>
           </CardContainer>
         )}
 
@@ -95,13 +96,15 @@ export const GroupDetails = () => {
               <UserInfoRow pubkey={member.publicKey} key={member.publicKey} />
             ))}
 
-            {members.length > 5 && (
-              <Link to={`${location.pathname}/group-members`}>
-                <Button variant="ghost" size="sm">
-                  View All Members <ArrowRightIcon className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-            )}
+            <div className="mt-4">
+              {members.length > 5 && (
+                <Link to={`${location.pathname}/group-members`}>
+                  <Button variant="ghost" size="sm">
+                    View All Members <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              )}
+            </div>
           </CardContainer>
         </div>
       </div>
