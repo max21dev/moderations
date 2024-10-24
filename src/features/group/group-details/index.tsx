@@ -18,7 +18,7 @@ import { useGroupDetails } from './hooks';
 export const GroupDetails = () => {
   const { groupId } = useParams();
 
-  const { admins, group, members } = useGroupDetails({ groupId });
+  const { admins, group, members, notes } = useGroupDetails({ groupId });
 
   const groupHost = useMemo(
     () => (group ? group.relay.replace('wss://', '').replace('ws://', '').replace('/', '') : ''),
@@ -101,6 +101,26 @@ export const GroupDetails = () => {
                 <Link to={`${location.pathname}/group-members`}>
                   <Button variant="ghost" size="sm">
                     View All Members <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </CardContainer>
+        </div>
+
+        <div className="flex gap-4 w-full h-full">
+          <CardContainer title={`Notes`}>
+            {notes.slice(0, 5).map((note) => (
+              <div className="truncate" key={note.id}>
+                <Muted>{note.content}</Muted>
+              </div>
+            ))}
+
+            <div className="mt-4">
+              {notes.length > 5 && (
+                <Link to={`${location.pathname}/group-notes`}>
+                  <Button variant="ghost" size="sm">
+                    View All Notes <ArrowRightIcon className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
               )}
