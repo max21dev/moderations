@@ -1,10 +1,10 @@
 import { NDKKind } from '@nostr-dev-kit/ndk';
 import { useMemo } from 'react';
 
-import { useGroupEvents } from '@/shared/hooks';
+import { useGroupMetadataEvents } from '@/shared/hooks';
 
 export const useGroupMembers = (groupId: string | undefined) => {
-  const { events } = useGroupEvents(groupId, NDKKind.GroupMembers);
+  const { events } = useGroupMetadataEvents(groupId, NDKKind.GroupMembers);
 
   const members = useMemo(
     () =>

@@ -4,13 +4,13 @@ import { useMemo } from 'react';
 
 import { useNip29Ndk } from '@/shared/hooks';
 
-export const useGroupEvents = (groupId: string | undefined, eventKind: NDKKind) => {
+export const useGroupMetadataEvents = (groupId: string | undefined, eventKind: NDKKind) => {
   const { nip29Ndk } = useNip29Ndk();
 
   const { events, eose } = useSubscribe(
     useMemo(
       () => ({
-        filters: !groupId ? [] : [{ kinds: [eventKind], '#h': [groupId] }],
+        filters: !groupId ? [] : [{ kinds: [eventKind], '#d': [groupId], limit: 1 }],
         enabled: !!nip29Ndk && !!groupId && !!eventKind,
         opts: { groupable: false },
         customNdk: nip29Ndk,
