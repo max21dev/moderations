@@ -1,5 +1,5 @@
 import { useSubscribe } from 'nostr-hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { useNip29Ndk } from '@/shared/hooks';
 import { Group } from '@/shared/types';
@@ -7,8 +7,6 @@ import { Group } from '@/shared/types';
 const filters = [{ kinds: [39000], limit: 100 }];
 
 export const useGroupsList = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
   const { nip29Ndk } = useNip29Ndk();
 
   const { events: groupsEvents, eose } = useSubscribe(
@@ -39,13 +37,7 @@ export const useGroupsList = () => {
     [groupsEvents],
   );
 
-  useEffect(() => {
-    if (groups && groups.length > 0) {
-      setIsLoading(false);
-    } else {
-      setIsLoading(!eose);
-    }
-  }, [groups, eose]);
+  const isLoading = useMemo(() => (!groups || groups.length == 0) && !eose, [groups, eose]);
 
   return { groups, isLoading };
 };
