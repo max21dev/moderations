@@ -2,6 +2,7 @@ export { useGlobalNdk } from './use-global-ndk';
 export { useGlobalProfile } from './use-global-profile';
 export { useGroup } from './use-group';
 export { useGroupAdmins } from './use-group-admins';
+export { useGroupEvents } from './use-group-events';
 export { useGroupMembers } from './use-group-members';
 export { useGroupsList } from './use-groups-list';
 export { useLoginModalState } from './use-login-modal-state';
