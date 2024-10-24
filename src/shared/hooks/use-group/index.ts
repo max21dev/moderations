@@ -1,33 +1,19 @@
-import { useSubscribe } from 'nostr-hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { NDKKind } from '@nostr-dev-kit/ndk';
+import { useMemo } from 'react';
 
-import { useNip29Ndk } from '@/shared/hooks';
+import { useGroupMetadataEvents } from '@/shared/hooks';
+
 import { Group } from '@/shared/types';
 
-type Status = 'idle' | 'loading' | 'success';
-
 export const useGroup = (groupId: string | undefined) => {
-  const { nip29Ndk } = useNip29Ndk();
-
-  const [status, setStatus] = useState<Status>('idle');
-
-  const { events: groupsEvents } = useSubscribe(
-    useMemo(
-      () => ({
-        filters: !groupId ? [] : [{ kinds: [39000], '#d': [groupId] }],
-        enabled: !!groupId,
-        customNdk: nip29Ndk,
-      }),
-      [groupId, nip29Ndk],
-    ),
-  );
+  const { events, isLoading } = useGroupMetadataEvents(groupId, NDKKind.GroupMetadata);
 
   const group = useMemo(() => {
-    if (groupsEvents.length === 0) {
+    if (events.length == 0) {
       return undefined;
     }
 
-    const groupEvent = groupsEvents[0];
+    const groupEvent = events[0];
 
     const nameTag = groupEvent.getMatchingTags('name')[0];
     const pictureTag = groupEvent.getMatchingTags('picture')[0];
@@ -43,17 +29,7 @@ export const useGroup = (groupId: string | undefined) => {
       event: groupEvent,
       relay: groupEvent.relay?.url || '',
     } as Group;
-  }, [groupsEvents]);
+  }, [events]);
 
-  useEffect(() => {
-    if (groupId && !group) {
-      setStatus('loading');
-    } else if (groupId && group) {
-      setStatus('success');
-    } else {
-      setStatus('idle');
-    }
-  }, [groupId, group]);
-
-  return { group, status };
+  return { group, isLoading };
 };

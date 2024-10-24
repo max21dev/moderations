@@ -3,10 +3,10 @@ import { useMemo } from 'react';
 
 import { GroupAdminPermission } from '@/shared/types';
 
-import { useGroupEvents } from '@/shared/hooks';
+import { useGroupMetadataEvents } from '@/shared/hooks';
 
 export const useGroupAdmins = (groupId: string | undefined) => {
-  const { events } = useGroupEvents(groupId, NDKKind.GroupAdmins);
+  const { events } = useGroupMetadataEvents(groupId, NDKKind.GroupAdmins);
 
   const admins = useMemo(
     () =>
