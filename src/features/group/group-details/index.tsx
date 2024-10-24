@@ -18,7 +18,7 @@ import { useGroupDetails } from './hooks';
 export const GroupDetails = () => {
   const { groupId } = useParams();
 
-  const { admins, group, members, notes } = useGroupDetails({ groupId });
+  const { admins, group, members, notes, chats } = useGroupDetails({ groupId });
 
   const groupHost = useMemo(
     () => (group ? group.relay.replace('wss://', '').replace('ws://', '').replace('/', '') : ''),
@@ -109,6 +109,25 @@ export const GroupDetails = () => {
         </div>
 
         <div className="flex gap-4 w-full h-full">
+          <CardContainer title={`Chats`}>
+            {chats.slice(0, 5).map((chat) => (
+              <div className="truncate" key={chat.id}>
+                <Muted>{chat.content}</Muted>
+              </div>
+            ))}
+
+            {/* TODO: Add Routes and Pages */}
+            {/* <div className="mt-4">
+              {chats.length > 5 && (
+                <Link to={`${location.pathname}/group-chats`}>
+                  <Button variant="ghost" size="sm">
+                    View All Chats <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              )}
+            </div> */}
+          </CardContainer>
+
           <CardContainer title={`Notes`}>
             {notes.slice(0, 5).map((note) => (
               <div className="truncate" key={note.id}>
@@ -116,7 +135,8 @@ export const GroupDetails = () => {
               </div>
             ))}
 
-            <div className="mt-4">
+            {/* TODO: Add Routes and Pages */}
+            {/* <div className="mt-4">
               {notes.length > 5 && (
                 <Link to={`${location.pathname}/group-notes`}>
                   <Button variant="ghost" size="sm">
@@ -124,7 +144,7 @@ export const GroupDetails = () => {
                   </Button>
                 </Link>
               )}
-            </div>
+            </div> */}
           </CardContainer>
         </div>
       </div>
