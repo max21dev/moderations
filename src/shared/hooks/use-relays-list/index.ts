@@ -1,11 +1,9 @@
 import { useActiveUser, useSubscribe } from 'nostr-hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { useGlobalNdk } from '@/shared/hooks';
 
 export const useRelaysList = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
   const { globalNdk } = useGlobalNdk();
 
   const { activeUser } = useActiveUser({ customNdk: globalNdk });
@@ -28,13 +26,7 @@ export const useRelaysList = () => {
     [events],
   );
 
-  useEffect(() => {
-    if (events && events.length > 0) {
-      setIsLoading(false);
-    } else {
-      setIsLoading(!eose);
-    }
-  }, [events, eose]);
+  const isLoading = useMemo(() => relays.length == 0 && !eose, [relays, eose]);
 
   return { relays, isLoading };
 };
