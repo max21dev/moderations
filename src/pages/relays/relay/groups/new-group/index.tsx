@@ -2,10 +2,12 @@ import { NDKKind, NDKPublishError } from '@nostr-dev-kit/ndk';
 import { EyeClosedIcon, EyeIcon, LockIcon, LockOpenIcon } from 'lucide-react';
 import { useNewEvent } from 'nostr-hooks';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
+import { useToast } from '@/shared/components/ui/use-toast';
 
 import { Breadcrumbs } from '@/features/breadcrumbs';
 
@@ -18,10 +20,34 @@ export const NewGroupPage = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [isOpen, setIsOpen] = useState(true);
 
+  const { toast } = useToast();
+
+  const { relay } = useParams();
+
   const { nip29Ndk } = useNip29Ndk();
   const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
 
   const createGroup = () => {
+    // TODO: NIP-29 doesn't support creating groups yet
+    toast({
+      title: 'Error',
+      description: 'Creating groups is not supported yet',
+      variant: 'destructive',
+      action: (
+        <a
+          href={decodeURIComponent(relay || '')
+            .replace('wss://', 'https://')
+            .replace('ws://', 'http://')}
+          target="_blank"
+          rel="noreferrer"
+          className="shrink-0 hover:underline"
+        >
+          Open Relay
+        </a>
+      ),
+    });
+    return;
+
     const event = createNewEvent();
     event.kind = NDKKind.GroupAdminCreateGroup;
     event.tags = [
