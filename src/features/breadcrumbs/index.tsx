@@ -11,6 +11,7 @@ import {
 } from '@/shared/components/ui/breadcrumb';
 
 import { LoaderData } from '@/shared/types';
+import { ellipsis } from '@/shared/utils';
 
 export const Breadcrumbs = () => {
   const { crumbs } = useLoaderData() as LoaderData;
@@ -24,11 +25,11 @@ export const Breadcrumbs = () => {
               {crumb.to ? (
                 <>
                   <BreadcrumbLink asChild>
-                    <Link to={crumb.to}>{crumb.label}</Link>
+                    <Link to={crumb.to}>{ellipsis(crumb.label, 30)}</Link>
                   </BreadcrumbLink>
                 </>
               ) : (
-                <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                <BreadcrumbPage>{ellipsis(crumb.label, 30)}</BreadcrumbPage>
               )}
             </BreadcrumbItem>
 

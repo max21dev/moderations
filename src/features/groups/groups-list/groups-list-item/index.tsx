@@ -14,7 +14,7 @@ import {
 import { InformationDialog } from '@/shared/components/information-dialog';
 
 import { Group } from '@/shared/types';
-import { loader } from '@/shared/utils';
+import { ellipsis, loader } from '@/shared/utils';
 
 export const GroupsListItem = ({ group }: { group: Group }) => {
   const groupHost = useMemo(
@@ -26,7 +26,7 @@ export const GroupsListItem = ({ group }: { group: Group }) => {
     <Card className="transition-colors duration-300 hover:border-purple-600">
       <CardContent className="mt-4 flex flex-col gap-4">
         <div className="flex gap-4">
-          <div className="w-16 h-16 bg-secondary rounded-md overflow-hidden">
+          <div className="w-16 h-16 bg-secondary rounded-md overflow-hidden shrink-0">
             {group.picture && (
               <img
                 src={loader(group.picture, { w: 64, h: 64 })}
@@ -38,7 +38,7 @@ export const GroupsListItem = ({ group }: { group: Group }) => {
 
           <div className="flex flex-col justify-center gap-2">
             <div className="text-xl font-semibold leading-none flex gap-4 items-center">
-              {group.name}
+              {ellipsis(group.name, 50)}
 
               <TooltipProvider>
                 <Tooltip>
@@ -71,7 +71,11 @@ export const GroupsListItem = ({ group }: { group: Group }) => {
               </TooltipProvider>
             </div>
 
-            {group.about && <div className="text-sm text-muted-foreground">{group.about}</div>}
+            {group.about && (
+              <div className="[overflow-wrap:anywhere] text-xs font-light text-muted-foreground">
+                {ellipsis(group.about, 200)}
+              </div>
+            )}
           </div>
         </div>
 
