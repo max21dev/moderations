@@ -29,24 +29,28 @@ export const GroupDetails = () => {
 
   return (
     <>
-      <div className="mb-4 w-full flex items-center">
-        <div className="flex items-center gap-2">
-          <div className="bg-secondary w-12 h-12 rounded-md overflow-hidden">
-            {group && group.picture && (
-              <img alt={group.name} src={loader(group.picture, { w: 48, h: 48 })} />
-            )}
+      <div className="mb-4 w-full">
+        <div className="mb-2 flex items-center">
+          <div className="flex items-center gap-2">
+            <div className="bg-secondary w-12 h-12 rounded-md overflow-hidden shrink-0">
+              {group && group.picture && (
+                <img alt={group.name} src={loader(group.picture, { w: 48, h: 48 })} />
+              )}
+            </div>
+
+            <div>
+              <H3>{group?.name || '<unnamed>'}</H3>
+            </div>
           </div>
 
-          <div>
-            <H3>{group?.name || '<unnamed>'}</H3>
-
-            {group && group.about && <Muted>{group.about}</Muted>}
-          </div>
+          <Button className="ml-auto" variant="outline" asChild>
+            <Link to={`${location.pathname}/edit-group`}>Edit Group</Link>
+          </Button>
         </div>
 
-        <Button className="ml-auto" variant="outline" asChild>
-          <Link to={`${location.pathname}/edit-group`}>Edit Group</Link>
-        </Button>
+        {group && group.about && (
+          <p className="break-words text-xs font-light text-muted-foreground">{group.about}</p>
+        )}
       </div>
 
       <div className="flex flex-col gap-4">
@@ -70,7 +74,7 @@ export const GroupDetails = () => {
           </CardContainer>
         )}
 
-        <div className="flex gap-4 w-full h-full">
+        <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
           <CardContainer
             title={`Admins (${admins.length})`}
             linkTo={`${location.pathname}/group-admins`}
@@ -108,7 +112,7 @@ export const GroupDetails = () => {
           </CardContainer>
         </div>
 
-        <div className="flex gap-4 w-full h-full">
+        <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
           <CardContainer title={`Chats`}>
             {chats.slice(0, 5).map((chat) => (
               <div className="truncate" key={chat.id}>
