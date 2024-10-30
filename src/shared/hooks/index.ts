@@ -6,6 +6,7 @@ export { useGroupChats } from './use-group-chats';
 export { useGroupEvents } from './use-group-events';
 export { useGroupMembers } from './use-group-members';
 export { useGroupMetadataEvents } from './use-group-metadata-events';
+export { useGroupModeration } from './use-group-moderation';
 export { useGroupNotes } from './use-group-notes';
 export { useGroupsList } from './use-groups-list';
 export { useLoginModalState } from './use-login-modal-state';
