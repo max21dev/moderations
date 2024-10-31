@@ -3,6 +3,7 @@ export { useGlobalProfile } from './use-global-profile';
 export { useGroup } from './use-group';
 export { useGroupAdmins } from './use-group-admins';
 export { useGroupChats } from './use-group-chats';
+export { useGroupDetails } from './use-group-details';
 export { useGroupEvents } from './use-group-events';
 export { useGroupMembers } from './use-group-members';
 export { useGroupMetadataEvents } from './use-group-metadata-events';
