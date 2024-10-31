@@ -13,21 +13,33 @@ import {
   DialogTrigger,
 } from '@/shared/components/ui/dialog';
 
-import { GroupSummary } from '@/features/groups';
-import { useGroupDetails, useGroupModeration } from '@/shared/hooks';
+import { useGroupMetadata, useGroupModeration } from '@/shared/hooks';
+import { GroupMetadata } from '@/shared/types';
+
+import { GroupMetadataForm, GroupSummary } from '@/features/groups';
 
 export const EditGroup = () => {
   const { groupId } = useParams();
 
-  const { group } = useGroupDetails({ groupId });
+  const { metadata } = useGroupMetadata(groupId);
 
-  const { deleteGroup } = useGroupModeration({ groupId });
+  const { deleteGroup, updateMetadata } = useGroupModeration({ groupId });
 
-  if (!groupId) return null;
+  const initialValues: Partial<GroupMetadata> = metadata || {};
+
+  if (!groupId || !metadata) return null;
 
   return (
-    <>
-      <div className="mb-4 w-full">{group && <GroupSummary group={group} />}</div>
+    <div className="flex flex-col gap-4 justify-center w-full">
+      {metadata && <GroupSummary metadata={metadata} />}
+
+      <CardContainer title="Group Metadata">
+        <GroupMetadataForm
+          submitLabel="Save Changes"
+          onSubmit={updateMetadata}
+          initialValues={initialValues}
+        />
+      </CardContainer>
 
       <CardContainer title="Danger Zone">
         <Dialog>
@@ -52,6 +64,6 @@ export const EditGroup = () => {
           </DialogContent>
         </Dialog>
       </CardContainer>
-    </>
+    </div>
   );
 };
