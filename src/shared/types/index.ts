@@ -1,16 +1,12 @@
 import { NDKEvent } from '@nostr-dev-kit/ndk';
 
-export type Group = {
+export type GroupMetadata = {
   id: string;
   name: string;
   picture: string;
   about: string;
-  privacy: 'public' | 'private';
-  type: 'open' | 'closed';
-  admins: GroupAdmin[];
-  members: GroupMember[];
-  event: NDKEvent;
-  relay: string;
+  isPublic: boolean;
+  isOpen: boolean;
 };
 
 export type GroupAdmin = {
