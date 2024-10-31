@@ -3,17 +3,15 @@ import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
-import { H3 } from '@/shared/components/ui/typography/h3';
 import { Muted } from '@/shared/components/ui/typography/muted';
 
 import { CardContainer } from '@/shared/components/card-container';
 import { InformationDialog } from '@/shared/components/information-dialog';
 
+import { useGroupDetails } from '@/shared/hooks';
+
+import { GroupSummary } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
-
-import { loader } from '@/shared/utils';
-
-import { useGroupDetails } from './hooks';
 
 export const GroupDetails = () => {
   const { groupId } = useParams();
@@ -29,29 +27,7 @@ export const GroupDetails = () => {
 
   return (
     <>
-      <div className="mb-4 w-full">
-        <div className="mb-2 flex items-center">
-          <div className="flex items-center gap-2">
-            <div className="bg-secondary w-12 h-12 rounded-md overflow-hidden shrink-0">
-              {group && group.picture && (
-                <img alt={group.name} src={loader(group.picture, { w: 48, h: 48 })} />
-              )}
-            </div>
-
-            <div>
-              <H3>{group?.name || '<unnamed>'}</H3>
-            </div>
-          </div>
-
-          <Button className="ml-auto" variant="outline" asChild>
-            <Link to={`${location.pathname}/edit-group`}>Edit Group</Link>
-          </Button>
-        </div>
-
-        {group && group.about && (
-          <p className="break-words text-xs font-light text-muted-foreground">{group.about}</p>
-        )}
-      </div>
+      <div className="mb-4 w-full">{group && <GroupSummary group={group} />}</div>
 
       <div className="flex flex-col gap-4">
         {group && (
