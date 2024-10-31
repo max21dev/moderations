@@ -1,5 +1,4 @@
 import { ArrowRightIcon } from 'lucide-react';
-import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
@@ -8,7 +7,14 @@ import { Muted } from '@/shared/components/ui/typography/muted';
 import { CardContainer } from '@/shared/components/card-container';
 import { InformationDialog } from '@/shared/components/information-dialog';
 
-import { useGroupDetails } from '@/shared/hooks';
+import {
+  useGroupAdmins,
+  useGroupChats,
+  useGroupHost,
+  useGroupMembers,
+  useGroupMetadata,
+  useGroupNotes,
+} from '@/shared/hooks';
 
 import { GroupSummary } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
@@ -16,35 +22,35 @@ import { UserInfoRow } from '@/features/users';
 export const GroupDetails = () => {
   const { groupId } = useParams();
 
-  const { admins, group, members, notes, chats } = useGroupDetails({ groupId });
-
-  const groupHost = useMemo(
-    () => (group ? group.relay.replace('wss://', '').replace('ws://', '').replace('/', '') : ''),
-    [group],
-  );
+  const { metadata, metadataEvent } = useGroupMetadata(groupId);
+  const { host } = useGroupHost();
+  const { members } = useGroupMembers(groupId);
+  const { admins } = useGroupAdmins(groupId);
+  const { chats } = useGroupChats(groupId);
+  const { notes } = useGroupNotes(groupId);
 
   if (!groupId) return null;
 
   return (
     <>
-      <div className="mb-4 w-full">{group && <GroupSummary group={group} />}</div>
+      <div className="mb-4 w-full">{metadata && <GroupSummary metadata={metadata} />}</div>
 
       <div className="flex flex-col gap-4">
-        {group && (
+        {groupId && (
           <CardContainer title="Information">
             <div className="flex gap-4">
               <InformationDialog
                 buttonLabel="View Raw Information"
                 title="Raw Information"
                 description="This is the raw information of the group."
-                content={JSON.stringify(group.event.rawEvent(), null, 2)}
+                content={JSON.stringify(metadataEvent.rawEvent(), null, 2)}
               />
 
               <InformationDialog
                 buttonLabel="View Group Identifier"
                 title="Group Identifier"
                 description="This is the identifier of the group."
-                content={`${groupHost}'${group.id}`}
+                content={`${host}'${groupId}`}
               />
             </div>
           </CardContainer>
