@@ -39,12 +39,14 @@ export const GroupDetails = () => {
         {groupId && (
           <CardContainer title="Information">
             <div className="flex gap-4">
-              <InformationDialog
-                buttonLabel="View Raw Information"
-                title="Raw Information"
-                description="This is the raw information of the group."
-                content={JSON.stringify(metadataEvent.rawEvent(), null, 2)}
-              />
+              {metadataEvent && (
+                <InformationDialog
+                  buttonLabel="View Raw Information"
+                  title="Raw Information"
+                  description="This is the raw information of the group."
+                  content={JSON.stringify(metadataEvent.rawEvent(), null, 2)}
+                />
+              )}
 
               <InformationDialog
                 buttonLabel="View Group Identifier"

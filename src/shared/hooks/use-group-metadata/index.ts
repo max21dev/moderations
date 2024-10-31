@@ -8,10 +8,10 @@ import { GroupMetadata } from '@/shared/types';
 export const useGroupMetadata = (groupId: string | undefined) => {
   const { events, isLoading } = useGroupMetadataEvents(groupId, NDKKind.GroupMetadata);
 
-  const metadataEvent = events[0];
+  const metadataEvent = events && events.length > 0 ? events[0] : undefined;
 
   const metadata = useMemo(() => {
-    if (events.length == 0) {
+    if (!metadataEvent) {
       return undefined;
     }
 
