@@ -2,24 +2,27 @@ import { useSubscribe } from 'nostr-hooks';
 import { useMemo } from 'react';
 
 import { useNip29Ndk } from '@/shared/hooks';
-import { Group } from '@/shared/types';
+import { GroupMetadata } from '@/shared/types';
 
 const filters = [{ kinds: [39000], limit: 100 }];
 
-export const useGroupsList = () => {
+// TODO: refactor – no need to use useSubscribe directly
+
+export const useGroupsMetadataList = () => {
   const { nip29Ndk } = useNip29Ndk();
 
   const { events: groupsEvents, eose } = useSubscribe(
     useMemo(() => ({ filters, customNdk: nip29Ndk }), [nip29Ndk]),
   );
 
-  const groups = useMemo(
+  const metadataList = useMemo(
     () =>
       groupsEvents
         .filter((e) => {
+          const dTag = e.dTag;
           const nameTag = e.getMatchingTags('name')?.[0];
 
-          return nameTag && nameTag[1] !== '';
+          return dTag && nameTag && nameTag[1] !== '';
         })
         .map(
           (e) =>
@@ -27,17 +30,18 @@ export const useGroupsList = () => {
               id: e.dTag,
               name: e.getMatchingTags('name')?.[0]?.[1],
               about: e.getMatchingTags('about')?.[0]?.[1],
-              privacy: e.getMatchingTags('public') ? 'public' : 'private',
-              type: e.getMatchingTags('open') ? 'open' : 'closed',
               picture: e.getMatchingTags('picture')?.[0]?.[1] || '',
-              event: e,
-              relay: e.relay?.url || '',
-            }) as Group,
+              isOpen: e.getMatchingTags('open') ? true : false,
+              isPublic: e.getMatchingTags('public') ? true : false,
+            }) as GroupMetadata,
         ),
     [groupsEvents],
   );
 
-  const isLoading = useMemo(() => (!groups || groups.length == 0) && !eose, [groups, eose]);
+  const isLoading = useMemo(
+    () => (!metadataList || metadataList.length == 0) && !eose,
+    [metadataList, eose],
+  );
 
-  return { groups, isLoading };
+  return { metadataList, isLoading };
 };
