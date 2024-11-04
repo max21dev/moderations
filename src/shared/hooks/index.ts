@@ -4,6 +4,8 @@ export { useGroupAdmins } from './use-group-admins';
 export { useGroupChats } from './use-group-chats';
 export { useGroupEvents } from './use-group-events';
 export { useGroupHost } from './use-group-host';
+export { useGroupJoinRequests } from './use-group-join-requests';
+export { useGroupLeaveRequests } from './use-group-leave-requests';
 export { useGroupMembers } from './use-group-members';
 export { useGroupMetadata } from './use-group-metadata';
 export { useGroupMetadataEvents } from './use-group-metadata-events';
