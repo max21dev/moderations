@@ -68,11 +68,13 @@ export const GroupDetails = () => {
             ))}
 
             {admins.length > 5 && (
-              <Link to={`${location.pathname}/group-admins`}>
+              <div>
                 <Button variant="ghost" size="sm">
-                  View All Admins <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  <Link to={`${location.pathname}/group-admins`} className="flex">
+                    View All Admins <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Link>
                 </Button>
-              </Link>
+              </div>
             )}
           </CardContainer>
 
@@ -84,20 +86,20 @@ export const GroupDetails = () => {
               <UserInfoRow pubkey={member.publicKey} key={member.publicKey} />
             ))}
 
-            <div className="mt-4">
-              {members.length > 5 && (
-                <Link to={`${location.pathname}/group-members`}>
-                  <Button variant="ghost" size="sm">
+            {members.length > 5 && (
+              <div>
+                <Button variant="ghost" size="sm">
+                  <Link to={`${location.pathname}/group-members`} className="flex">
                     View All Members <ArrowRightIcon className="ml-2 w-4 h-4" />
-                  </Button>
-                </Link>
-              )}
-            </div>
+                  </Link>
+                </Button>
+              </div>
+            )}
           </CardContainer>
         </div>
 
         <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
-          <CardContainer title={`Chats`}>
+          <CardContainer title="Chats">
             {chats.slice(0, 5).map((chat) => (
               <div className="truncate" key={chat.id}>
                 <Muted>{chat.content}</Muted>
@@ -105,18 +107,19 @@ export const GroupDetails = () => {
             ))}
 
             {/* TODO: Add Routes and Pages */}
-            {/* <div className="mt-4">
-              {chats.length > 5 && (
-                <Link to={`${location.pathname}/group-chats`}>
-                  <Button variant="ghost" size="sm">
+
+            {chats.length > 5 && (
+              <div>
+                <Button variant="ghost" size="sm" disabled>
+                  <Link to={`${location.pathname}/group-chats`} className="flex">
                     View All Chats <ArrowRightIcon className="ml-2 w-4 h-4" />
-                  </Button>
-                </Link>
-              )}
-            </div> */}
+                  </Link>
+                </Button>
+              </div>
+            )}
           </CardContainer>
 
-          <CardContainer title={`Notes`}>
+          <CardContainer title="Notes">
             {notes.slice(0, 5).map((note) => (
               <div className="truncate" key={note.id}>
                 <Muted>{note.content}</Muted>
@@ -124,15 +127,15 @@ export const GroupDetails = () => {
             ))}
 
             {/* TODO: Add Routes and Pages */}
-            {/* <div className="mt-4">
-              {notes.length > 5 && (
-                <Link to={`${location.pathname}/group-notes`}>
-                  <Button variant="ghost" size="sm">
+            {notes.length > 5 && (
+              <div>
+                <Button variant="ghost" size="sm" disabled>
+                  <Link to={`${location.pathname}/group-notes`} className="flex">
                     View All Notes <ArrowRightIcon className="ml-2 w-4 h-4" />
-                  </Button>
-                </Link>
-              )}
-            </div> */}
+                  </Link>
+                </Button>
+              </div>
+            )}
           </CardContainer>
         </div>
       </div>
