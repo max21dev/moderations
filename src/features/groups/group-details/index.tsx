@@ -11,6 +11,8 @@ import {
   useGroupAdmins,
   useGroupChats,
   useGroupHost,
+  useGroupJoinRequests,
+  useGroupLeaveRequests,
   useGroupMembers,
   useGroupMetadata,
   useGroupNotes,
@@ -28,6 +30,8 @@ export const GroupDetails = () => {
   const { admins } = useGroupAdmins(groupId);
   const { chats } = useGroupChats(groupId);
   const { notes } = useGroupNotes(groupId);
+  const { joinRequests } = useGroupJoinRequests(groupId);
+  const { leaveRequests } = useGroupLeaveRequests(groupId);
 
   if (!groupId) return null;
 
@@ -132,6 +136,73 @@ export const GroupDetails = () => {
                 <Button variant="ghost" size="sm" disabled>
                   <Link to={`${location.pathname}/group-notes`} className="flex">
                     View All Notes <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
+          </CardContainer>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
+          <CardContainer title="Join Requests">
+            {joinRequests.slice(0, 5).map((joinRequest) => (
+              <div key={joinRequest.pubkey}>
+                <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.pubkey} />
+
+                {(joinRequest.reason || joinRequest.code) && (
+                  <p className="p-2 text-xs text-muted-foreground">
+                    {joinRequest.reason && (
+                      <>
+                        <b>Reason: </b>
+                        <span>{joinRequest.reason}</span>
+                        <br />
+                      </>
+                    )}
+
+                    {joinRequest.code && (
+                      <>
+                        <b>Code: </b>
+                        <span>{joinRequest.code}</span>
+                      </>
+                    )}
+                  </p>
+                )}
+              </div>
+            ))}
+
+            {/* TODO: Add Routes and Pages */}
+
+            {joinRequests.length > 5 && (
+              <div>
+                <Button variant="ghost" size="sm" disabled>
+                  <Link to={`${location.pathname}/group-join-requests`} className="flex">
+                    View All Join Requests <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
+          </CardContainer>
+
+          <CardContainer title="Leave Requests">
+            {leaveRequests.slice(0, 5).map((leaveRequest) => (
+              <div key={leaveRequest.pubkey}>
+                <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.pubkey} />
+
+                {leaveRequest.reason && (
+                  <p className="p-2 text-xs text-muted-foreground">
+                    <b>Reason: </b>
+                    <span>{leaveRequest.reason}</span>
+                  </p>
+                )}
+              </div>
+            ))}
+
+            {/* TODO: Add Routes and Pages */}
+            {leaveRequests.length > 5 && (
+              <div>
+                <Button variant="ghost" size="sm" disabled>
+                  <Link to={`${location.pathname}/group-leave-requests`} className="flex">
+                    View All Leave Requests <ArrowRightIcon className="ml-2 w-4 h-4" />
                   </Link>
                 </Button>
               </div>
