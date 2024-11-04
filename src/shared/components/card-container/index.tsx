@@ -28,7 +28,7 @@ export const CardContainer = ({ children, linkTo, title }: PropsWithChildren<Pro
 
         <Separator />
 
-        <CardDescription>{children}</CardDescription>
+        {children}
       </CardContent>
     </Card>
   );
