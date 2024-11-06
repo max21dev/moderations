@@ -8,7 +8,7 @@ import { RelaysList } from '@/features/relays';
 export const RelaysPage = () => {
   return (
     <>
-      <div className="mb-4 w-full flex items-center">
+      <div className="w-full flex items-center">
         <H3>Relays</H3>
 
         <Button className="ml-auto" variant="outline" asChild>

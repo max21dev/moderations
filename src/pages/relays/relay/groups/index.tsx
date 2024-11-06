@@ -10,7 +10,7 @@ export const GroupsPage = () => {
     <>
       <Breadcrumbs />
 
-      <div className="mb-4 w-full flex items-center">
+      <div className="w-full flex items-center">
         <h3>Groups</h3>
 
         <Button className="ml-auto" variant="outline" asChild>
