@@ -17,7 +17,7 @@ export const Breadcrumbs = () => {
   const { crumbs } = useLoaderData() as LoaderData;
 
   return (
-    <Breadcrumb className="py-4">
+    <Breadcrumb>
       <BreadcrumbList>
         {crumbs.map((crumb, index) => (
           <Fragment key={index}>

@@ -21,7 +21,7 @@ export const RelayPage = () => {
     <>
       <Breadcrumbs />
 
-      <div className="mb-4 w-full flex items-center">
+      <div className="w-full flex items-center">
         <div className="flex items-center gap-2">
           <div className="bg-secondary w-12 h-12 rounded-md overflow-hidden">
             {info && info.icon && <img alt={info.name} src={loader(info.icon, { w: 48, h: 48 })} />}

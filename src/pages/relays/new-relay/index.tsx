@@ -61,7 +61,7 @@ export const NewRelayPage = () => {
 
       <H3>Add New Relay</H3>
 
-      <div className="mt-4 flex gap-2 items-center w-full">
+      <div className="flex gap-2 items-center w-full">
         <Label htmlFor="relay-name" className="shrink-0">
           Relay URL:
         </Label>
