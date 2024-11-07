@@ -14,7 +14,7 @@ export const GroupAdminsPage = () => {
         <h3>Group Admins</h3>
 
         <Button className="ml-auto" variant="outline" asChild>
-          <Link to={`${location.pathname}/add-admin`}>Add Admin</Link>
+          <Link to={`${location.pathname}/add-group-admin`}>Add Admin</Link>
         </Button>
       </div>
 
