@@ -16,10 +16,7 @@ export const GroupAdmins = () => {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <CardContainer
-          title={`Admins (${admins.length})`}
-          linkTo={`${location.pathname}/group-admins`}
-        >
+        <CardContainer title={`Admins (${admins.length})`}>
           {admins.map((admin) => (
             <UserInfoRow key={admin.publicKey} pubkey={admin.publicKey} />
           ))}
