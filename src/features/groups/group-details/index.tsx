@@ -6,6 +6,7 @@ import { Muted } from '@/shared/components/ui/typography/muted';
 
 import { CardContainer } from '@/shared/components/card-container';
 import { InformationDialog } from '@/shared/components/information-dialog';
+import { Badge } from '@/shared/components/ui/badge';
 
 import {
   useGroupAdmins,
@@ -68,7 +69,15 @@ export const GroupDetails = () => {
             linkTo={`${location.pathname}/group-admins`}
           >
             {admins.slice(0, 5).map((admin) => (
-              <UserInfoRow key={admin.publicKey} pubkey={admin.publicKey} />
+              <UserInfoRow key={admin.publicKey} pubkey={admin.publicKey}>
+                <div className="flex gap-2 flex-wrap w-full">
+                  {admin.roles.map((role) => (
+                    <Badge variant="outline" className="shrink-0">
+                      {role}
+                    </Badge>
+                  ))}
+                </div>
+              </UserInfoRow>
             ))}
 
             {admins.length > 5 && (
@@ -147,26 +156,26 @@ export const GroupDetails = () => {
           <CardContainer title="Join Requests">
             {joinRequests.slice(0, 5).map((joinRequest) => (
               <div key={joinRequest.pubkey}>
-                <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.pubkey} />
+                <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.pubkey}>
+                  {(joinRequest.reason || joinRequest.code) && (
+                    <p className="p-2 text-xs text-muted-foreground">
+                      {joinRequest.reason && (
+                        <>
+                          <b>Reason: </b>
+                          <span>{joinRequest.reason}</span>
+                          <br />
+                        </>
+                      )}
 
-                {(joinRequest.reason || joinRequest.code) && (
-                  <p className="p-2 text-xs text-muted-foreground">
-                    {joinRequest.reason && (
-                      <>
-                        <b>Reason: </b>
-                        <span>{joinRequest.reason}</span>
-                        <br />
-                      </>
-                    )}
-
-                    {joinRequest.code && (
-                      <>
-                        <b>Code: </b>
-                        <span>{joinRequest.code}</span>
-                      </>
-                    )}
-                  </p>
-                )}
+                      {joinRequest.code && (
+                        <>
+                          <b>Code: </b>
+                          <span>{joinRequest.code}</span>
+                        </>
+                      )}
+                    </p>
+                  )}
+                </UserInfoRow>
               </div>
             ))}
 
@@ -186,14 +195,14 @@ export const GroupDetails = () => {
           <CardContainer title="Leave Requests">
             {leaveRequests.slice(0, 5).map((leaveRequest) => (
               <div key={leaveRequest.pubkey}>
-                <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.pubkey} />
-
-                {leaveRequest.reason && (
-                  <p className="p-2 text-xs text-muted-foreground">
-                    <b>Reason: </b>
-                    <span>{leaveRequest.reason}</span>
-                  </p>
-                )}
+                <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.pubkey}>
+                  {leaveRequest.reason && (
+                    <p className="p-2 text-xs text-muted-foreground">
+                      <b>Reason: </b>
+                      <span>{leaveRequest.reason}</span>
+                    </p>
+                  )}
+                </UserInfoRow>
               </div>
             ))}
 
