@@ -18,10 +18,11 @@ export const CardContainer = ({ children, linkTo, title }: PropsWithChildren<Pro
           <>
             <div>
               {linkTo ? (
-                <Link to={linkTo || ''}>
-                  <Button className="text-xl font-semibold" variant="link">
-                    {title}
-                  </Button>
+                <Link
+                  to={linkTo || ''}
+                  className="text-xl font-semibold hover:underline hover:cursor-pointer"
+                >
+                  {title}
                 </Link>
               ) : (
                 <div className="text-xl font-semibold">{title}</div>
