@@ -31,7 +31,7 @@ export const EditGroup = () => {
 
   return (
     <div className="flex flex-col gap-4 justify-center w-full">
-      {metadata && <GroupSummary metadata={metadata} />}
+      <GroupSummary metadata={metadata} />
 
       <CardContainer title="Group Metadata">
         <GroupMetadataForm

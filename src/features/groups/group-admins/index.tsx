@@ -18,7 +18,7 @@ export const GroupAdmins = () => {
 
   return (
     <>
-      <div className="mb-4 w-full">{metadata && <GroupSummary metadata={metadata} />}</div>
+      <GroupSummary metadata={metadata} />
 
       <div className="flex flex-col gap-4">
         <CardContainer title={`Admins (${admins.length})`}>
