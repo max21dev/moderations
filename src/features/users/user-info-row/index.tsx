@@ -20,7 +20,7 @@ export function UserInfoRow({ pubkey, children }: { pubkey: string; children?: R
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   return (
-    <div className="group p-2 w-full rounded-lg border border-transparent hover:border-muted-foreground transition-colors duration-500 ease-out">
+    <div className="group p-2 w-full rounded-lg border border-transparent hover:border-border transition-colors duration-500 ease-out">
       <div className="flex items-center gap-4 w-full">
         <TooltipProvider>
           <Tooltip>

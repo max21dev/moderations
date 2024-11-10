@@ -10,7 +10,9 @@ import {
 import { GroupMetadata } from '@/shared/types';
 import { ellipsis, loader } from '@/shared/utils';
 
-export const GroupSummary = ({ metadata }: { metadata: GroupMetadata }) => {
+export const GroupSummary = ({ metadata }: { metadata: GroupMetadata | undefined }) => {
+  if (!metadata) return null;
+
   const { name, picture, about, isOpen, isPublic } = metadata;
 
   return (
