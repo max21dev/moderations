@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useGroupEvents } from '@/shared/hooks';
 
 export const useGroupLeaveRequests = (groupId: string | undefined) => {
-  const { events } = useGroupEvents(groupId, 9022 as NDKKind);
+  const { events, hasMore, loadMore } = useGroupEvents(groupId, 9022 as NDKKind);
 
   const leaveRequests = useMemo(
     () =>
@@ -15,5 +15,9 @@ export const useGroupLeaveRequests = (groupId: string | undefined) => {
     [events],
   );
 
-  return { leaveRequests };
+  return {
+    leaveRequests,
+    hasMoreLeaveRequests: hasMore,
+    loadMoreLeaveRequests: loadMore,
+  };
 };

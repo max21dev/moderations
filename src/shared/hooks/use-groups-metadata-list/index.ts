@@ -11,9 +11,12 @@ const filters = [{ kinds: [39000], limit: 100 }];
 export const useGroupsMetadataList = () => {
   const { nip29Ndk } = useNip29Ndk();
 
-  const { events: groupsEvents, eose } = useSubscribe(
-    useMemo(() => ({ filters, customNdk: nip29Ndk }), [nip29Ndk]),
-  );
+  const {
+    events: groupsEvents,
+    eose,
+    hasMore,
+    loadMore,
+  } = useSubscribe(useMemo(() => ({ filters, customNdk: nip29Ndk }), [nip29Ndk]));
 
   const metadataList = useMemo(
     () =>
@@ -43,5 +46,5 @@ export const useGroupsMetadataList = () => {
     [metadataList, eose],
   );
 
-  return { metadataList, isLoading };
+  return { metadataList, isLoading, hasMore, loadMore };
 };

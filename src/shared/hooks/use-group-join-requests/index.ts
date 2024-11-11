@@ -4,9 +4,7 @@ import { useMemo } from 'react';
 import { useGroupEvents } from '@/shared/hooks';
 
 export const useGroupJoinRequests = (groupId: string | undefined) => {
-  const { events } = useGroupEvents(groupId, NDKKind.GroupAdminRequestJoin);
-
-  console.log('events', events);
+  const { events, hasMore, loadMore } = useGroupEvents(groupId, NDKKind.GroupAdminRequestJoin);
 
   const joinRequests = useMemo(
     () =>
@@ -18,5 +16,9 @@ export const useGroupJoinRequests = (groupId: string | undefined) => {
     [events],
   );
 
-  return { joinRequests };
+  return {
+    joinRequests,
+    hasMoreJoinReqeusts: hasMore,
+    loadMoreJoinRequests: loadMore,
+  };
 };
