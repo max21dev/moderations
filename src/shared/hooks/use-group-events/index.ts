@@ -10,7 +10,7 @@ export const useGroupEvents = (groupId: string | undefined, eventKind: NDKKind) 
   const { events, eose, loadMore, hasMore } = useSubscribe(
     useMemo(
       () => ({
-        filters: !groupId ? [] : [{ kinds: [eventKind], '#h': [groupId], limit: 5 }],
+        filters: !groupId ? [] : [{ kinds: [eventKind], '#h': [groupId], limit: 6 }],
         enabled: !!nip29Ndk && !!groupId && !!eventKind,
         opts: { groupable: false },
         customNdk: nip29Ndk,
