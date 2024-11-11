@@ -45,6 +45,8 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
  * │   │   │   │   │   │   │   ├── index.tsx
  * │   │   │   │   │   │   │   ├── group-member-event/
  * │   │   │   │   │   │   │   │   └── index.tsx
+ * │   │   │   │   ├── group-chats/
+ * │   │   │   │   │   ├── index.tsx
  * │   │   │   │   ├── group-events/
  * │   │   │   │   │   ├── index.tsx
  * │   │   │   │   │   ├── new-group-event/
@@ -101,6 +103,8 @@ const GroupEventsPage = () => import('@/pages/relays/relay/groups/group/group-ev
 const NewGroupEventPage = () =>
   import('@/pages/relays/relay/groups/group/group-events/new-group-event');
 const GroupEventPage = () => import('@/pages/relays/relay/groups/group/group-events/group-event');
+
+const GroupChatsPage = () => import('@/pages/relays/relay/groups/group/group-chats');
 
 export const router = createBrowserRouter([
   {
@@ -751,6 +755,30 @@ export const router = createBrowserRouter([
                             },
                           },
                         ],
+                      },
+                      {
+                        path: 'group-chats',
+                        loader: ({ params }) => ({
+                          crumbs: [
+                            { label: 'Relays', to: '/relays' },
+                            {
+                              label: params.relay,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                            },
+                            {
+                              label: 'Groups',
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                            },
+                            {
+                              label: params.groupId,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                            },
+                            { label: 'Group Chats' },
+                          ],
+                        }),
+                        async lazy() {
+                          return { Component: (await GroupChatsPage()).GroupChatsPage };
+                        },
                       },
                     ],
                   },

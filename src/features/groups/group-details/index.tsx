@@ -112,18 +112,16 @@ export const GroupDetails = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
-          <CardContainer title="Chats">
+          <CardContainer title="Chats" linkTo={`${location.pathname}/group-chats`}>
             {chats.slice(0, 5).map((chat) => (
               <div className="truncate" key={chat.id}>
                 <Muted>{chat.content}</Muted>
               </div>
             ))}
 
-            {/* TODO: Add Routes and Pages */}
-
             {chats.length > 5 && (
               <div>
-                <Button variant="ghost" size="sm" disabled>
+                <Button variant="ghost" size="sm">
                   <Link to={`${location.pathname}/group-chats`} className="flex">
                     View All Chats <ArrowRightIcon className="ml-2 w-4 h-4" />
                   </Link>
