@@ -1,4 +1,5 @@
 import { Spinner } from '@/shared/components/spinner';
+import { Button } from '@/shared/components/ui/button';
 
 import { useGroupsMetadataList } from '@/shared/hooks';
 
@@ -6,7 +7,7 @@ import { EmptyGroupsList } from './empty-groups-list';
 import { GroupsListItem } from './groups-list-item';
 
 export const GroupsList = () => {
-  const { metadataList, isLoading } = useGroupsMetadataList();
+  const { metadataList, isLoading, hasMore, loadMore } = useGroupsMetadataList();
 
   if (isLoading) return <Spinner />;
 
@@ -17,6 +18,10 @@ export const GroupsList = () => {
       {metadataList.map((metadata) => (
         <GroupsListItem key={metadata.id} metadata={metadata} />
       ))}
+
+      <Button onClick={() => loadMore()} disabled={!hasMore} className="w-full" variant="outline">
+        Load More
+      </Button>
     </div>
   );
 };
