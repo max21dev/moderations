@@ -1,4 +1,4 @@
-import { ChevronUpIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
@@ -10,18 +10,26 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
 
-import { cn, ellipsis } from '@/shared/utils';
+import { cn, ellipsis, loader } from '@/shared/utils';
 
 import { useUserInfoRow } from './hooks';
 
-export function UserInfoRow({ pubkey, children }: { pubkey: string; children?: React.ReactNode }) {
-  const { name, image, npub } = useUserInfoRow({ pubkey });
+export function UserInfoRow({
+  pubkey,
+  children,
+  openByDefault,
+}: {
+  pubkey: string;
+  children?: React.ReactNode;
+  openByDefault?: boolean;
+}) {
+  const { name, image, npub, nip05 } = useUserInfoRow({ pubkey });
 
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(openByDefault || false);
 
   return (
     <div className="group p-2 w-full rounded-lg border border-transparent hover:border-border transition-colors duration-500 ease-out">
-      <div className="flex items-center gap-4 w-full">
+      <div className="flex items-center gap-2 w-full">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -30,7 +38,11 @@ export function UserInfoRow({ pubkey, children }: { pubkey: string; children?: R
                   {!image ? (
                     <AvatarFallback>{pubkey.slice(0, 2).toUpperCase()}</AvatarFallback>
                   ) : (
-                    <AvatarImage src={image} alt={name} />
+                    <AvatarImage
+                      src={loader(image, { w: 32, h: 32 })}
+                      className="w-8 h-8"
+                      alt={name}
+                    />
                   )}
                 </Avatar>
               </a>
@@ -47,8 +59,10 @@ export function UserInfoRow({ pubkey, children }: { pubkey: string; children?: R
           target="_blank"
           rel="noreferrer"
         >
-          <span className="text-sm">{name}</span>
-          <span className="text-sm text-gray-500">{ellipsis(npub, 10)}</span>
+          <span className="text-xs">{name}</span>
+          <span className="text-xs text-muted-foreground font-light">
+            {nip05 || ellipsis(npub, 10)}
+          </span>
         </a>
 
         {children && (
@@ -58,7 +72,7 @@ export function UserInfoRow({ pubkey, children }: { pubkey: string; children?: R
             className="ml-auto rounded-full"
             onClick={() => setIsDetailsOpen((prev) => !prev)}
           >
-            <ChevronUpIcon
+            <ChevronDownIcon
               size={16}
               className={cn(
                 'transition-all duration-500 ease-out text-background group-hover:text-muted-foreground',

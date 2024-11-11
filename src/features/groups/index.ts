@@ -1,5 +1,6 @@
 export * from './edit-group';
 export * from './group-admins';
+export * from './group-chats';
 export * from './group-details';
 export * from './group-members';
 export * from './group-metadata-form';
