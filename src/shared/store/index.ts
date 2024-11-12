@@ -56,7 +56,7 @@ export const useStore = create<
   // NDK State
 
   globalNdk: new NDK({
-    explicitRelayUrls: ['wss://nos.lol'],
+    explicitRelayUrls: ['wss://nos.lol', 'wss://relay.damus.io/'],
     autoConnectUserRelays: true,
     autoFetchUserMutelist: false,
     cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-global` }),
