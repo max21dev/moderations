@@ -18,7 +18,7 @@ export const useGroupJoinRequests = (groupId: string | undefined) => {
 
   return {
     joinRequests,
-    hasMoreJoinReqeusts: hasMore,
+    hasMoreJoinRequests: hasMore,
     loadMoreJoinRequests: loadMore,
   };
 };

@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
 
+import { Button } from '@/shared/components/ui/button';
+
 import { CardContainer } from '@/shared/components/card-container';
 
 import { GroupSummary } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
 
-import { Button } from '@/shared/components/ui/button';
 import { useGroupChats, useGroupMetadata } from '@/shared/hooks';
 
 export const GroupChats = () => {
@@ -22,13 +23,18 @@ export const GroupChats = () => {
 
       <div className="flex flex-col gap-4">
         <CardContainer title={`Chats`}>
-          {chats.map((chat) => (
-            <div className="flex items-center gap-2">
-              <UserInfoRow key={chat.id} pubkey={chat.pubkey} openByDefault>
-                <p className="truncate text-xs font-light">{chat.content}</p>
-              </UserInfoRow>
-            </div>
-          ))}
+          {chats.length == 0 ? (
+            <p className="text-muted-foreground text-xs">Empty List</p>
+          ) : (
+            chats.length > 0 &&
+            chats.map((chat) => (
+              <div className="flex items-center gap-2">
+                <UserInfoRow key={chat.id} pubkey={chat.pubkey} openByDefault>
+                  <p className="truncate text-xs font-light">{chat.content}</p>
+                </UserInfoRow>
+              </div>
+            ))
+          )}
 
           <Button
             variant="outline"
