@@ -66,7 +66,6 @@ export const GroupMetadataForm = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Button
-            disabled
             className="w-full gap-1"
             onClick={() => setIsPublic((prev) => !prev)}
             variant="outline"
@@ -78,7 +77,6 @@ export const GroupMetadataForm = ({
 
         <div>
           <Button
-            disabled
             className="w-full gap-1"
             onClick={() => setIsOpen((prev) => !prev)}
             variant="outline"

@@ -105,6 +105,10 @@ const NewGroupEventPage = () =>
 const GroupEventPage = () => import('@/pages/relays/relay/groups/group/group-events/group-event');
 
 const GroupChatsPage = () => import('@/pages/relays/relay/groups/group/group-chats');
+const GroupNotesPage = () => import('@/pages/relays/relay/groups/group/group-notes');
+const GroupJoinRequestsPage = () => import('@/pages/relays/relay/groups/group/group-join-requests');
+const GroupLeaveRequestsPage = () =>
+  import('@/pages/relays/relay/groups/group/group-leave-requests');
 
 export const router = createBrowserRouter([
   {
@@ -778,6 +782,82 @@ export const router = createBrowserRouter([
                         }),
                         async lazy() {
                           return { Component: (await GroupChatsPage()).GroupChatsPage };
+                        },
+                      },
+                      {
+                        path: 'group-notes',
+                        loader: ({ params }) => ({
+                          crumbs: [
+                            { label: 'Relays', to: '/relays' },
+                            {
+                              label: params.relay,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                            },
+                            {
+                              label: 'Groups',
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                            },
+                            {
+                              label: params.groupId,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                            },
+                            { label: 'Group Notes' },
+                          ],
+                        }),
+                        async lazy() {
+                          return { Component: (await GroupNotesPage()).GroupNotesPage };
+                        },
+                      },
+                      {
+                        path: 'group-join-requests',
+                        loader: ({ params }) => ({
+                          crumbs: [
+                            { label: 'Relays', to: '/relays' },
+                            {
+                              label: params.relay,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                            },
+                            {
+                              label: 'Groups',
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                            },
+                            {
+                              label: params.groupId,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                            },
+                            { label: 'Group Join Requests' },
+                          ],
+                        }),
+                        async lazy() {
+                          return {
+                            Component: (await GroupJoinRequestsPage()).GroupJoinRequestsPage,
+                          };
+                        },
+                      },
+                      {
+                        path: 'group-leave-requests',
+                        loader: ({ params }) => ({
+                          crumbs: [
+                            { label: 'Relays', to: '/relays' },
+                            {
+                              label: params.relay,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                            },
+                            {
+                              label: 'Groups',
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                            },
+                            {
+                              label: params.groupId,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                            },
+                            { label: 'Group Leave Requests' },
+                          ],
+                        }),
+                        async lazy() {
+                          return {
+                            Component: (await GroupLeaveRequestsPage()).GroupLeaveRequestsPage,
+                          };
                         },
                       },
                     ],

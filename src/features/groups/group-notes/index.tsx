@@ -7,13 +7,13 @@ import { CardContainer } from '@/shared/components/card-container';
 import { GroupSummary } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
 
-import { useGroupChats, useGroupMetadata } from '@/shared/hooks';
+import { useGroupNotes, useGroupMetadata } from '@/shared/hooks';
 
-export const GroupChats = () => {
+export const GroupNotes = () => {
   const { groupId } = useParams();
 
   const { metadata } = useGroupMetadata(groupId);
-  const { chats, hasMoreChats, loadMoreChats } = useGroupChats(groupId);
+  const { notes, hasMoreNotes, loadMoreNotes } = useGroupNotes(groupId);
 
   if (!groupId) return null;
 
@@ -22,12 +22,12 @@ export const GroupChats = () => {
       <GroupSummary metadata={metadata} />
 
       <div className="flex flex-col gap-4">
-        <CardContainer title={`Chats`}>
-          {chats.length == 0 ? (
+        <CardContainer title={`Notes`}>
+          {notes.length == 0 ? (
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
-            chats.length > 0 &&
-            chats.map((chat) => (
+            notes.length > 0 &&
+            notes.map((chat) => (
               <div className="flex items-center gap-2">
                 <UserInfoRow key={chat.id} pubkey={chat.pubkey} openByDefault>
                   <p className="truncate text-xs font-light">{chat.content}</p>
@@ -39,8 +39,8 @@ export const GroupChats = () => {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => loadMoreChats(50)}
-            disabled={!hasMoreChats}
+            onClick={() => loadMoreNotes(50)}
+            disabled={!hasMoreNotes}
           >
             Load more
           </Button>

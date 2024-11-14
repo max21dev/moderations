@@ -10,6 +10,8 @@ import { GroupMetadata } from '@/shared/types';
 
 import { GroupSummary } from '@/features/groups';
 
+import { GroupsListItemShortcuts } from './groups-list-item-shortcuts';
+
 export const GroupsListItem = ({ metadata }: { metadata: GroupMetadata }) => {
   const { host } = useGroupHost();
 
@@ -36,11 +38,15 @@ export const GroupsListItem = ({ metadata }: { metadata: GroupMetadata }) => {
           content={`${host}'${metadata.id}`}
         />
 
-        <Link to={`${location.pathname}/${encodeURIComponent(metadata.id)}`} className="ml-auto">
-          <Button size="sm">
-            <ArrowRightIcon size={16} />
-          </Button>
-        </Link>
+        <div className="ml-auto flex items-center gap-4">
+          <GroupsListItemShortcuts groupId={metadata.id} />
+
+          <Link to={`${location.pathname}/${encodeURIComponent(metadata.id)}`}>
+            <Button size="sm">
+              <ArrowRightIcon size={16} />
+            </Button>
+          </Link>
+        </div>
       </div>
     </CardContainer>
   );

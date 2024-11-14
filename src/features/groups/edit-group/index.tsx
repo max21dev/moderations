@@ -42,27 +42,29 @@ export const EditGroup = () => {
       </CardContainer>
 
       <CardContainer title="Danger Zone">
-        <Dialog>
-          <DialogTrigger>
-            <Button variant="destructive">Delete Group</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Are you absolutely sure?</DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete your group.
-              </DialogDescription>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DialogClose>
-                <Button variant="destructive" onClick={deleteGroup}>
-                  Delete Group
-                </Button>
-              </DialogFooter>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        <div>
+          <Dialog>
+            <DialogTrigger>
+              <Button variant="destructive">Delete Group</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete your group.
+                </DialogDescription>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button variant="destructive" onClick={deleteGroup}>
+                    Delete Group
+                  </Button>
+                </DialogFooter>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </div>
       </CardContainer>
     </div>
   );

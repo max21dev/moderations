@@ -21,9 +21,14 @@ export const GroupMembers = () => {
 
       <div className="flex flex-col gap-4">
         <CardContainer title={`Members (${members.length})`}>
-          {members.map((member) => (
-            <UserInfoRow key={member.publicKey} pubkey={member.publicKey} />
-          ))}
+          {members.length == 0 ? (
+            <p className="text-muted-foreground text-xs">Empty List</p>
+          ) : (
+            members.length > 0 &&
+            members.map((member) => (
+              <UserInfoRow key={member.publicKey} pubkey={member.publicKey} />
+            ))
+          )}
         </CardContainer>
       </div>
     </>
