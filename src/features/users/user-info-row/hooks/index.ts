@@ -1,10 +1,9 @@
 import { NDKUser } from '@nostr-dev-kit/ndk';
+import { useProfile } from 'nostr-hooks';
 import { useMemo } from 'react';
 
-import { useGlobalProfile } from '@/shared/hooks';
-
 export const useUserInfoRow = ({ pubkey }: { pubkey: string }) => {
-  const { profile } = useGlobalProfile({ pubkey });
+  const { profile } = useProfile({ pubkey });
 
   const npub = useMemo(() => new NDKUser({ pubkey }).npub, [pubkey]);
 

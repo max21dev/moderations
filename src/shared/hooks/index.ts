@@ -1,14 +1,5 @@
-export { useGlobalNdk } from './use-global-ndk';
-export { useGlobalProfile } from './use-global-profile';
-export { useGroupAdmins } from './use-group-admins';
-export { useGroupChats } from './use-group-chats';
-export { useGroupEvents } from './use-group-events';
-export { useGroupHost } from './use-group-host';
-export { useGroupJoinRequests } from './use-group-join-requests';
-export { useGroupLeaveRequests } from './use-group-leave-requests';
-export { useGroupMembers } from './use-group-members';
-export { useGroupMetadata } from './use-group-metadata';
-export { useGroupMetadataEvents } from './use-group-metadata-events';
+export { useActiveGroupId } from './use-active-group-id';
+export { useActiveRelay } from './use-active-relay';
 export { useGroupModeration } from './use-group-moderation';
 export { useGroupNotes } from './use-group-notes';
 export { useGroupsMetadataList } from './use-groups-metadata-list';

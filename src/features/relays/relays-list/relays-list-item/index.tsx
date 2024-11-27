@@ -16,7 +16,7 @@ import { useRelayInformation } from '@/shared/hooks';
 import { loader } from '@/shared/utils';
 
 export const RelaysListItem = ({ relay }: { relay: string }) => {
-  const { info } = useRelayInformation({ relay });
+  const { info } = useRelayInformation(relay);
 
   if (!info) {
     return null;

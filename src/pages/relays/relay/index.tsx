@@ -1,7 +1,4 @@
-import NDK from '@nostr-dev-kit/ndk';
-import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
-import { useEffect } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
 import { H3 } from '@/shared/components/ui/typography/h3';
@@ -9,13 +6,13 @@ import { Muted } from '@/shared/components/ui/typography/muted';
 
 import { Breadcrumbs } from '@/features/breadcrumbs';
 
-import { useGlobalNdk, useNip29Ndk, useRelayInformation } from '@/shared/hooks';
+import { useActiveRelay, useRelayInformation } from '@/shared/hooks';
 import { loader } from '@/shared/utils';
 
 export const RelayPage = () => {
-  const { relay } = useParams();
+  const { activeRelay } = useActiveRelay();
 
-  const { info } = useRelayInformation({ relay });
+  const { info } = useRelayInformation(activeRelay);
 
   return (
     <>
