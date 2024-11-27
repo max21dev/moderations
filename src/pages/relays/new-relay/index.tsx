@@ -1,4 +1,5 @@
-import { useNewEvent } from 'nostr-hooks';
+import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { useNdk } from 'nostr-hooks';
 import { useState } from 'react';
 
 import { Button } from '@/shared/components/ui/button';
@@ -7,9 +8,9 @@ import { Label } from '@/shared/components/ui/label';
 import { H3 } from '@/shared/components/ui/typography/h3';
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import { useGlobalNdk, useRelaysList } from '@/shared/hooks';
-
 import { Breadcrumbs } from '@/features/breadcrumbs';
+
+import { useRelaysList } from '@/shared/hooks';
 
 export const NewRelayPage = () => {
   const [inputValue, setInputValue] = useState('');
@@ -17,8 +18,7 @@ export const NewRelayPage = () => {
   const { toast } = useToast();
 
   const { relays } = useRelaysList();
-  const { globalNdk } = useGlobalNdk();
-  const { createNewEvent } = useNewEvent({ customNdk: globalNdk });
+  const { ndk } = useNdk();
 
   const handleAddRelay = () => {
     if (!inputValue) {
@@ -36,7 +36,7 @@ export const NewRelayPage = () => {
       return;
     }
 
-    const event = createNewEvent();
+    const event = new NDKEvent(ndk);
     event.kind = 30078;
     event.dTag = 'moderations/relays';
     relays.forEach((relay) => {

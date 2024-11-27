@@ -1,4 +1,4 @@
-import { useLogin } from 'nostr-hooks';
+import { useLogin, useNdk } from 'nostr-hooks';
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
@@ -7,18 +7,25 @@ import { Toaster } from '@/shared/components/ui/toaster';
 
 import { router } from '@/app/router';
 
-import { useGlobalNdk } from '@/shared/hooks';
-
 import './index.css';
 
 export const App = () => {
-  const { globalNdk, setGlobalNdk } = useGlobalNdk();
+  const { initNdk, ndk } = useNdk();
+
+  const { loginFromLocalStorage } = useLogin();
 
   useEffect(() => {
-    globalNdk.connect();
-  }, [globalNdk]);
+    initNdk({
+      explicitRelayUrls: ['wss://nos.lol', 'wss://relay.damus.io/'],
+      autoConnectUserRelays: true,
+      autoFetchUserMutelist: false,
+      // cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-global` }),
+    });
+  }, [initNdk]);
 
-  const { loginFromLocalStorage } = useLogin({ customNdk: globalNdk, setCustomNdk: setGlobalNdk });
+  useEffect(() => {
+    ndk?.connect();
+  }, [ndk]);
 
   useEffect(() => {
     loginFromLocalStorage();

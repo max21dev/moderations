@@ -47,26 +47,5 @@ export const RelayPage = () => {
 };
 
 export const RelayLayout = () => {
-  const { relay } = useParams();
-
-  const { globalNdk } = useGlobalNdk();
-  const { nip29Ndk, setNip29Ndk } = useNip29Ndk();
-
-  useEffect(() => {
-    nip29Ndk.connect();
-  }, [nip29Ndk]);
-
-  useEffect(() => {
-    setNip29Ndk(
-      new NDK({
-        explicitRelayUrls: relay ? [relay] : undefined,
-        autoConnectUserRelays: false,
-        autoFetchUserMutelist: false,
-        cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-${relay}` }),
-        signer: globalNdk.signer,
-      }),
-    );
-  }, [relay, globalNdk.signer]);
-
   return <Outlet />;
 };
