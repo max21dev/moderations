@@ -1,24 +1,18 @@
-import { NDKKind } from '@nostr-dev-kit/ndk';
-import { useNewEvent } from 'nostr-hooks';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+  deleteGroup,
+  editGroupMetadata,
+  Nip29GroupId,
+  Nip29GroupMetadata,
+  Nip29Relay,
+} from 'nostr-hooks/nip29';
+import { useNavigate } from 'react-router-dom';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import { useGroupMetadata, useNip29Ndk } from '@/shared/hooks';
-import { GroupMetadata } from '@/shared/types';
-
-export const useGroupModeration = ({ groupId }: { groupId: string | undefined }) => {
+export const useGroupModeration = (relay: Nip29Relay, groupId: Nip29GroupId) => {
   const { toast } = useToast();
 
   const navigate = useNavigate();
-
-  const { relay } = useParams();
-
-  const { nip29Ndk } = useNip29Ndk();
-
-  const { metadataEvent } = useGroupMetadata(groupId);
-
-  const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
 
   const toastSuccess = ({ message }: { message: string }) => {
     toast({
@@ -35,58 +29,35 @@ export const useGroupModeration = ({ groupId }: { groupId: string | undefined })
     });
   };
 
-  const deleteGroup = () => {
-    if (!groupId || !metadataEvent) return;
-
-    const event = createNewEvent();
-    event.kind = 9008;
-    event.tags = [['h', groupId]];
-    event.publish().then(
-      (r) => {
-        if (r.size > 0) {
-          nip29Ndk.cacheAdapter?.deleteEvent?.(metadataEvent);
-
-          navigate(`/relays/${encodeURIComponent(relay || '')}/groups/`, { replace: true });
-        } else {
+  const handleDeleteGroup = () => {
+    groupId &&
+      deleteGroup({
+        groupId,
+        onError: () => {
           toastError({ message: 'Failed to delete group' });
-        }
-      },
-      () => {
-        toastError({ message: 'Failed to delete group' });
-      },
-    );
+        },
+        onSuccess: () => {
+          navigate(`/relays/${encodeURIComponent(relay || '')}/groups/`, { replace: true });
+        },
+      });
   };
 
-  const updateMetadata = (metadata: Omit<GroupMetadata, 'id'>) => {
-    if (!groupId) return;
-
-    const event = createNewEvent();
-    event.kind = NDKKind.GroupAdminEditMetadata;
-    event.tags = [
-      ['h', groupId],
-      ['name', metadata.name],
-      ['about', metadata.about],
-      ['picture', metadata.picture],
-      [metadata.isPublic ? 'public' : 'private'],
-      [metadata.isOpen ? 'open' : 'closed'],
-    ];
-
-    event.publish().then(
-      (r) => {
-        if (r.size > 0) {
-          toastSuccess({ message: 'Group metadata updated' });
-        } else {
-          toastError({ message: 'Failed to delete group' });
-        }
-      },
-      () => {
-        toastError({ message: 'Failed to delete group' });
-      },
-    );
+  const handleEditMetadata = (metadata: Nip29GroupMetadata) => {
+    groupId &&
+      editGroupMetadata({
+        groupId,
+        metadata: metadata,
+        onError: () => {
+          toastError({ message: 'Failed to update metadata' });
+        },
+        onSuccess: () => {
+          toastSuccess({ message: 'Metadata updated' });
+        },
+      });
   };
 
   return {
-    deleteGroup,
-    updateMetadata,
+    handleDeleteGroup,
+    handleEditMetadata,
   };
 };

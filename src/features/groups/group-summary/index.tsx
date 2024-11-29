@@ -1,4 +1,5 @@
 import { EyeClosedIcon, EyeIcon, LockIcon, LockOpenIcon } from 'lucide-react';
+import { Nip29GroupMetadata } from 'nostr-hooks/nip29';
 
 import {
   Tooltip,
@@ -7,10 +8,9 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
 
-import { GroupMetadata } from '@/shared/types';
 import { ellipsis, loader } from '@/shared/utils';
 
-export const GroupSummary = ({ metadata }: { metadata: GroupMetadata | undefined }) => {
+export const GroupSummary = ({ metadata }: { metadata: Nip29GroupMetadata | undefined }) => {
   if (!metadata) return null;
 
   const { name, picture, about, isOpen, isPublic } = metadata;

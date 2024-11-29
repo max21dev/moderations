@@ -1,21 +1,27 @@
 import { ArrowRightIcon } from 'lucide-react';
+import { Nip29GroupId, Nip29GroupMetadata, Nip29Relay, useGroupMetadata } from 'nostr-hooks/nip29';
 import { Link } from 'react-router-dom';
 
 import { CardContainer } from '@/shared/components/card-container';
 import { InformationDialog } from '@/shared/components/information-dialog';
 import { Button } from '@/shared/components/ui/button';
 
-import { useGroupHost, useGroupMetadata } from '@/shared/hooks';
-import { GroupMetadata } from '@/shared/types';
-
 import { GroupSummary } from '@/features/groups';
 
 import { GroupsListItemShortcuts } from './groups-list-item-shortcuts';
 
-export const GroupsListItem = ({ metadata }: { metadata: GroupMetadata }) => {
-  const { host } = useGroupHost();
+export const GroupsListItem = ({
+  relay,
+  groupId,
+  metadata,
+}: {
+  relay: Nip29Relay;
+  groupId: Nip29GroupId;
+  metadata: Nip29GroupMetadata;
+}) => {
+  const { metadataEvents } = useGroupMetadata(relay, groupId);
 
-  const { metadataEvent } = useGroupMetadata(metadata.id);
+  const metadataEvent = metadataEvents?.[0];
 
   return (
     <CardContainer>
@@ -35,13 +41,13 @@ export const GroupsListItem = ({ metadata }: { metadata: GroupMetadata }) => {
           buttonLabel="View Group Identifier"
           title="Group Identifier"
           description="This is the identifier of the group."
-          content={`${host}'${metadata.id}`}
+          content={`${relay}'${groupId}`}
         />
 
         <div className="ml-auto flex items-center gap-4">
-          <GroupsListItemShortcuts groupId={metadata.id} />
+          <GroupsListItemShortcuts groupId={groupId} relay={relay} />
 
-          <Link to={`${location.pathname}/${encodeURIComponent(metadata.id)}`}>
+          <Link to={`${location.pathname}/${encodeURIComponent(groupId || '')}`}>
             <Button size="sm">
               <ArrowRightIcon size={16} />
             </Button>

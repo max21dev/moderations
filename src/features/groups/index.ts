@@ -6,6 +6,6 @@ export * from './group-join-requests';
 export * from './group-leave-requests';
 export * from './group-members';
 export * from './group-metadata-form';
-export * from './group-notes';
 export * from './group-summary';
+export * from './group-threads';
 export * from './groups-list';

@@ -1,4 +1,4 @@
-import { useGroupChats, useGroupMetadata } from 'nostr-hooks/nip29';
+import { useGroupMetadata, useGroupThreads } from 'nostr-hooks/nip29';
 
 import { Button } from '@/shared/components/ui/button';
 
@@ -9,12 +9,12 @@ import { UserInfoRow } from '@/features/users';
 
 import { useActiveGroupId, useActiveRelay } from '@/shared/hooks';
 
-export const GroupChats = () => {
+export const GroupThreads = () => {
   const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroupId();
 
   const { metadata } = useGroupMetadata(activeRelay, activeGroupId);
-  const { chats, hasMoreChats, loadMoreChats } = useGroupChats(activeRelay, activeGroupId);
+  const { threads, hasMoreThreads, loadMoreThreads } = useGroupThreads(activeRelay, activeGroupId);
 
   if (!activeGroupId) return null;
 
@@ -23,14 +23,14 @@ export const GroupChats = () => {
       <GroupSummary metadata={metadata} />
 
       <div className="flex flex-col gap-4">
-        <CardContainer title={`Chats`}>
-          {chats?.length == 0 ? (
+        <CardContainer title={`Threads`}>
+          {threads?.length == 0 ? (
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
-            (chats || []).map((chat) => (
-              <div key={chat.id} className="flex items-center gap-2">
-                <UserInfoRow key={chat.id} pubkey={chat.pubkey} openByDefault>
-                  <p className="truncate text-xs font-light">{chat.content}</p>
+            (threads || []).map((thread) => (
+              <div key={thread.id} className="flex items-center gap-2">
+                <UserInfoRow key={thread.id} pubkey={thread.pubkey} openByDefault>
+                  <p className="truncate text-xs font-light">{thread.content}</p>
                 </UserInfoRow>
               </div>
             ))
@@ -39,8 +39,8 @@ export const GroupChats = () => {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => loadMoreChats(50)}
-            disabled={!hasMoreChats}
+            onClick={() => loadMoreThreads(50)}
+            disabled={!hasMoreThreads}
           >
             Load more
           </Button>
