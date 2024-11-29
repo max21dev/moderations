@@ -1,32 +1,28 @@
-import { useActiveUser, useSubscribe } from 'nostr-hooks';
-import { useMemo } from 'react';
-
-import { useGlobalNdk } from '@/shared/hooks';
+import { useActiveUser, useSubscription } from 'nostr-hooks';
+import { useEffect, useMemo } from 'react';
 
 export const useRelaysList = () => {
-  const { globalNdk } = useGlobalNdk();
+  const { activeUser } = useActiveUser();
 
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const subId = activeUser ? `relaysList-${activeUser.pubkey}` : undefined;
 
-  const { events, eose } = useSubscribe(
-    useMemo(
-      () => ({
-        filters: activeUser
-          ? [{ authors: [activeUser.pubkey], kinds: [30078], '#d': ['moderations/relays'] }]
-          : [],
-        enabled: !!activeUser,
-        customNdk: globalNdk,
-      }),
-      [activeUser, globalNdk],
-    ),
-  );
+  const { events, isLoading, createSubscription, removeSubscription } = useSubscription(subId);
+
+  useEffect(() => {
+    activeUser &&
+      createSubscription([
+        { authors: [activeUser.pubkey], kinds: [30078], '#d': ['moderations/relays'] },
+      ]);
+
+    return () => {
+      removeSubscription();
+    };
+  }, [activeUser?.pubkey, createSubscription, removeSubscription]);
 
   const relays = useMemo(
     () => (events && events.length > 0 ? events[0].getMatchingTags('r')?.map((t) => t[1]) : []),
     [events],
   );
-
-  const isLoading = useMemo(() => relays.length == 0 && !eose, [relays, eose]);
 
   return { relays, isLoading };
 };

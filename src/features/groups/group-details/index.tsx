@@ -1,5 +1,14 @@
 import { ArrowRightIcon } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import {
+  useGroupAdmins,
+  useGroupChats,
+  useGroupJoinRequests,
+  useGroupLeaveRequests,
+  useGroupMembers,
+  useGroupMetadata,
+  useGroupThreads,
+} from 'nostr-hooks/nip29';
+import { Link } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
 import { Muted } from '@/shared/components/ui/typography/muted';
@@ -8,40 +17,38 @@ import { CardContainer } from '@/shared/components/card-container';
 import { InformationDialog } from '@/shared/components/information-dialog';
 import { Badge } from '@/shared/components/ui/badge';
 
-import {
-  useGroupAdmins,
-  useGroupChats,
-  useGroupHost,
-  useGroupJoinRequests,
-  useGroupLeaveRequests,
-  useGroupMembers,
-  useGroupMetadata,
-  useGroupNotes,
-} from '@/shared/hooks';
-
 import { GroupSummary } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
 
+import { useActiveGroupId, useActiveRelay } from '@/shared/hooks';
+import { getHostFromRelay } from '@/shared/utils';
+
 export const GroupDetails = () => {
-  const { groupId } = useParams();
+  const { activeRelay } = useActiveRelay();
+  const { activeGroupId } = useActiveGroupId();
 
-  const { metadata, metadataEvent } = useGroupMetadata(groupId);
-  const { host } = useGroupHost();
-  const { members } = useGroupMembers(groupId);
-  const { admins } = useGroupAdmins(groupId);
-  const { chats } = useGroupChats(groupId);
-  const { notes } = useGroupNotes(groupId);
-  const { joinRequests } = useGroupJoinRequests(groupId);
-  const { leaveRequests } = useGroupLeaveRequests(groupId);
+  const { admins } = useGroupAdmins(activeRelay, activeGroupId);
+  const { chats } = useGroupChats(activeRelay, activeGroupId);
+  const { joinRequests } = useGroupJoinRequests(activeRelay, activeGroupId);
+  const { leaveRequests } = useGroupLeaveRequests(activeRelay, activeGroupId);
+  const { members } = useGroupMembers(activeRelay, activeGroupId);
+  const { metadata, metadataEvents } = useGroupMetadata(activeRelay, activeGroupId);
+  // const { reactions} = useGroupReactions(activeRelay, activeGroupId);
+  // const { threadComments } = useGroupThreadComments(activeRelay, activeGroupId);
+  const { threads } = useGroupThreads(activeRelay, activeGroupId);
 
-  if (!groupId) return null;
+  const host = getHostFromRelay(activeRelay);
+
+  const metadataEvent = metadataEvents?.[0];
+
+  if (!activeGroupId) return null;
 
   return (
     <>
       <GroupSummary metadata={metadata} />
 
       <div className="flex flex-col gap-4">
-        {groupId && (
+        {activeGroupId && (
           <CardContainer title="Information">
             <div className="flex gap-4">
               {metadataEvent && (
@@ -57,7 +64,7 @@ export const GroupDetails = () => {
                 buttonLabel="View Group Identifier"
                 title="Group Identifier"
                 description="This is the identifier of the group."
-                content={`${host}'${groupId}`}
+                content={`${host}'${activeGroupId}`}
               />
             </div>
           </CardContainer>
@@ -65,18 +72,17 @@ export const GroupDetails = () => {
 
         <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
           <CardContainer
-            title={`Admins (${admins.length})`}
+            title={`Admins (${admins?.length})`}
             linkTo={`${location.pathname}/group-admins`}
           >
-            {admins.length == 0 ? (
+            {admins?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
-              admins.length > 0 &&
-              admins.slice(0, 5).map((admin) => (
-                <UserInfoRow key={admin.publicKey} pubkey={admin.publicKey}>
+              admins?.slice(0, 5).map((admin) => (
+                <UserInfoRow key={admin.pubkey} pubkey={admin.pubkey}>
                   <div className="flex gap-2 flex-wrap w-full">
                     {admin.roles.map((role) => (
-                      <Badge variant="outline" className="shrink-0">
+                      <Badge key={role} variant="outline" className="shrink-0">
                         {role}
                       </Badge>
                     ))}
@@ -85,7 +91,7 @@ export const GroupDetails = () => {
               ))
             )}
 
-            {admins.length > 5 && (
+            {admins && admins.length > 5 && (
               <div>
                 <Button variant="ghost" size="sm">
                   <Link to={`${location.pathname}/group-admins`} className="flex">
@@ -97,19 +103,18 @@ export const GroupDetails = () => {
           </CardContainer>
 
           <CardContainer
-            title={`Members (${members.length})`}
+            title={`Members (${members?.length || 0})`}
             linkTo={`${location.pathname}/group-members`}
           >
-            {members.length == 0 ? (
+            {members?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
-              members.length > 0 &&
               members
-                .slice(0, 5)
-                .map((member) => <UserInfoRow pubkey={member.publicKey} key={member.publicKey} />)
+                ?.slice(0, 5)
+                .map((member) => <UserInfoRow pubkey={member.pubkey} key={member.pubkey} />)
             )}
 
-            {members.length > 5 && (
+            {members && members.length > 5 && (
               <div>
                 <Button variant="ghost" size="sm">
                   <Link to={`${location.pathname}/group-members`} className="flex">
@@ -123,18 +128,17 @@ export const GroupDetails = () => {
 
         <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
           <CardContainer title="Chats" linkTo={`${location.pathname}/group-chats`}>
-            {chats.length == 0 ? (
+            {chats?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
-              chats.length > 0 &&
-              chats.slice(0, 5).map((chat) => (
+              chats?.slice(0, 5).map((chat) => (
                 <div className="truncate" key={chat.id}>
                   <Muted>{chat.content}</Muted>
                 </div>
               ))
             )}
 
-            {chats.length > 5 && (
+            {chats && chats.length > 5 && (
               <div>
                 <Button variant="ghost" size="sm">
                   <Link to={`${location.pathname}/group-chats`} className="flex">
@@ -145,23 +149,22 @@ export const GroupDetails = () => {
             )}
           </CardContainer>
 
-          <CardContainer title="Notes" linkTo={`${location.pathname}/group-notes`}>
-            {notes.length == 0 ? (
+          <CardContainer title="Threads" linkTo={`${location.pathname}/group-threads`}>
+            {threads?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
-              notes.length > 0 &&
-              notes.slice(0, 5).map((note) => (
-                <div className="truncate" key={note.id}>
-                  <Muted>{note.content}</Muted>
+              threads?.slice(0, 5).map((thread) => (
+                <div className="truncate" key={thread.id}>
+                  <Muted>{thread.content}</Muted>
                 </div>
               ))
             )}
 
-            {notes.length > 5 && (
+            {threads && threads.length > 5 && (
               <div>
                 <Button variant="ghost" size="sm">
-                  <Link to={`${location.pathname}/group-notes`} className="flex">
-                    View All Notes <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  <Link to={`${location.pathname}/group-threads`} className="flex">
+                    View All Threads <ArrowRightIcon className="ml-2 w-4 h-4" />
                   </Link>
                 </Button>
               </div>
@@ -171,13 +174,12 @@ export const GroupDetails = () => {
 
         <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
           <CardContainer title="Join Requests" linkTo={`${location.pathname}/group-join-requests`}>
-            {joinRequests.length == 0 ? (
+            {joinRequests?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
-              joinRequests.length > 0 &&
-              joinRequests.slice(0, 5).map((joinRequest) => (
-                <div key={joinRequest.pubkey}>
-                  <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.pubkey}>
+              joinRequests?.slice(0, 5).map((joinRequest) => (
+                <div key={joinRequest.id}>
+                  <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.id}>
                     {(joinRequest.reason || joinRequest.code) && (
                       <p className="p-2 text-xs text-muted-foreground">
                         {joinRequest.reason && (
@@ -201,7 +203,7 @@ export const GroupDetails = () => {
               ))
             )}
 
-            {joinRequests.length > 5 && (
+            {joinRequests && joinRequests.length > 5 && (
               <div>
                 <Button variant="ghost" size="sm">
                   <Link to={`${location.pathname}/group-join-requests`} className="flex">
@@ -216,25 +218,17 @@ export const GroupDetails = () => {
             title="Leave Requests"
             linkTo={`${location.pathname}/group-leave-requests`}
           >
-            {leaveRequests.length == 0 ? (
+            {leaveRequests?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
-              leaveRequests.length > 0 &&
-              leaveRequests.slice(0, 5).map((leaveRequest) => (
-                <div key={leaveRequest.pubkey}>
-                  <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.pubkey}>
-                    {leaveRequest.reason && (
-                      <p className="p-2 text-xs text-muted-foreground">
-                        <b>Reason: </b>
-                        <span>{leaveRequest.reason}</span>
-                      </p>
-                    )}
-                  </UserInfoRow>
+              leaveRequests?.slice(0, 5).map((leaveRequest) => (
+                <div key={leaveRequest.id}>
+                  <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.id} />
                 </div>
               ))
             )}
 
-            {leaveRequests.length > 5 && (
+            {leaveRequests && leaveRequests.length > 5 && (
               <div>
                 <Button variant="ghost" size="sm">
                   <Link to={`${location.pathname}/group-leave-requests`} className="flex">

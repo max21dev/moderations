@@ -1,5 +1,4 @@
-import NDK, { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
-import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
+import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { create } from 'zustand';
 
 type AppState = {
@@ -18,16 +17,6 @@ type AppActions = {
   setZapTarget: (target: NDKEvent | NDKUser | undefined) => void;
 };
 
-type NdkState = {
-  globalNdk: NDK;
-  nip29Ndk: NDK;
-};
-
-type NdkActions = {
-  setGlobalNdk: (globalNdk: NDK) => void;
-  setNip29Ndk: (nip29Ndk: NDK) => void;
-};
-
 type ModerationState = {
   activeGroupId: string | undefined;
 };
@@ -36,46 +25,26 @@ type ModerationActions = {
   setActiveGroupId: (activeGroupId: string | undefined) => void;
 };
 
-export const useStore = create<
-  AppState & AppActions & NdkState & NdkActions & ModerationState & ModerationActions
->()((set) => ({
-  // App State
+export const useStore = create<AppState & AppActions & ModerationState & ModerationActions>()(
+  (set) => ({
+    // App State
 
-  isLoginModalOpen: false,
+    isLoginModalOpen: false,
 
-  isZapModalOpen: false,
+    isZapModalOpen: false,
 
-  zapTarget: undefined,
+    zapTarget: undefined,
 
-  setIsLoginModalOpen: (isOpen) => set({ isLoginModalOpen: isOpen }),
+    setIsLoginModalOpen: (isOpen) => set({ isLoginModalOpen: isOpen }),
 
-  setIsZapModalOpen: (isOpen) => set({ isZapModalOpen: isOpen }),
+    setIsZapModalOpen: (isOpen) => set({ isZapModalOpen: isOpen }),
 
-  setZapTarget: (target) => set({ zapTarget: target }),
+    setZapTarget: (target) => set({ zapTarget: target }),
 
-  // NDK State
+    // moderation State
 
-  globalNdk: new NDK({
-    explicitRelayUrls: ['wss://nos.lol', 'wss://relay.damus.io/'],
-    autoConnectUserRelays: true,
-    autoFetchUserMutelist: false,
-    cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-global` }),
+    activeGroupId: undefined,
+
+    setActiveGroupId: (activeGroupId) => set({ activeGroupId }),
   }),
-
-  setGlobalNdk: (globalNdk) => set({ globalNdk }),
-
-  nip29Ndk: new NDK({
-    explicitRelayUrls: [],
-    autoConnectUserRelays: false,
-    autoFetchUserMutelist: false,
-    cacheAdapter: undefined,
-  }),
-
-  setNip29Ndk: (nip29Ndk) => set({ nip29Ndk }),
-
-  // moderation State
-
-  activeGroupId: undefined,
-
-  setActiveGroupId: (activeGroupId) => set({ activeGroupId }),
-}));
+);

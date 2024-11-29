@@ -18,18 +18,18 @@ export const UserLoginModal = () => {
     setNsecInput,
     handleRemoteSigner,
     handleExtensionSigner,
-    handleSecretKeySigner,
-    handleSecretKeyGenerate,
+    handlePrivateKeySigner,
+    handlePrivateKeyGenerate,
     isLoginModalOpen,
     setIsLoginModalOpen,
-    globalSigner,
+    signer,
   } = useLoginModal();
 
   return (
     <>
       <Dialog
         open={isLoginModalOpen}
-        onOpenChange={(open) => (globalSigner ? setIsLoginModalOpen(open) : true)}
+        onOpenChange={(open) => (signer ? setIsLoginModalOpen(open) : true)}
       >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -46,8 +46,8 @@ export const UserLoginModal = () => {
                 Remote Signer
               </TabsTrigger>
 
-              <TabsTrigger value="secret-key" className="w-full">
-                Secret Key
+              <TabsTrigger value="private-key" className="w-full">
+                Private Key
               </TabsTrigger>
             </TabsList>
 
@@ -112,31 +112,31 @@ export const UserLoginModal = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="secret-key" tabIndex={-1}>
-                <Label>Your Secret Key:</Label>
+              <TabsContent value="private-key" tabIndex={-1}>
+                <Label>Your Private Key:</Label>
 
                 <Input
                   className="mt-2"
                   placeholder="nsec..."
                   value={nsecInput}
                   onChange={(e) => setNsecInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSecretKeySigner()}
+                  onKeyPress={(e) => e.key === 'Enter' && handlePrivateKeySigner()}
                 />
 
-                <Button className="mt-4 w-full" disabled={loading} onClick={handleSecretKeySigner}>
-                  {loading ? <Loader2 className="animate-spin" /> : `Login With Secret Key`}
+                <Button className="mt-4 w-full" disabled={loading} onClick={handlePrivateKeySigner}>
+                  {loading ? <Loader2 className="animate-spin" /> : `Login With Private Key`}
                 </Button>
 
                 <div className="mt-2 text-center">
                   <Muted>
-                    <span>Don't have a secret key yet?</span>
+                    <span>Don't have a private key yet?</span>
                     <br />
                     <Button
                       variant="link"
                       className="p-0 text-blue-600"
-                      onClick={handleSecretKeyGenerate}
+                      onClick={handlePrivateKeyGenerate}
                     >
-                      Generate a new secret key
+                      Generate a new private key
                     </Button>
                   </Muted>
                 </div>

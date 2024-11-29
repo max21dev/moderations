@@ -1,4 +1,5 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { Nip29GroupId, Nip29Relay } from 'nostr-hooks/nip29';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
@@ -22,12 +23,18 @@ import {
 
 import { useGroupModeration } from '@/shared/hooks';
 
-export const GroupsListItemShortcuts = ({ groupId }: { groupId: string | undefined }) => {
-  if (!groupId) return null;
-
-  const { deleteGroup } = useGroupModeration({ groupId });
+export const GroupsListItemShortcuts = ({
+  relay,
+  groupId,
+}: {
+  relay: Nip29Relay;
+  groupId: Nip29GroupId;
+}) => {
+  const { handleDeleteGroup } = useGroupModeration(relay, groupId);
 
   const navigate = useNavigate();
+
+  if (!groupId) return null;
 
   return (
     <>
@@ -55,9 +62,9 @@ export const GroupsListItemShortcuts = ({ groupId }: { groupId: string | undefin
               Chats
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => navigate(`${location.pathname}/${groupId}/group-notes`)}
+              onClick={() => navigate(`${location.pathname}/${groupId}/group-threads`)}
             >
-              Notes
+              Threads
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => navigate(`${location.pathname}/${groupId}/group-joint-requests`)}
@@ -96,7 +103,7 @@ export const GroupsListItemShortcuts = ({ groupId }: { groupId: string | undefin
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button variant="destructive" onClick={deleteGroup}>
+              <Button variant="destructive" onClick={handleDeleteGroup}>
                 Delete Group
               </Button>
             </DialogFooter>

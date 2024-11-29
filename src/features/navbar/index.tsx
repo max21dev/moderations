@@ -7,14 +7,10 @@ import { H3 } from '@/shared/components/ui/typography/h3';
 
 import { ModeToggle } from '@/shared/components/mode-toggle';
 
-import { useGlobalNdk } from '@/shared/hooks';
-
 import { UserAvatar } from '@/features/users';
 
 export const Navbar = () => {
-  const { globalNdk } = useGlobalNdk();
-
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const { activeUser } = useActiveUser();
 
   return (
     <>

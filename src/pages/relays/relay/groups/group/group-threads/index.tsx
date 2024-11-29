@@ -1,16 +1,16 @@
 import { Breadcrumbs } from '@/features/breadcrumbs';
-import { GroupNotes } from '@/features/groups';
+import { GroupThreads } from '@/features/groups';
 
-export const GroupNotesPage = () => {
+export const GroupThreadsPage = () => {
   return (
     <>
       <Breadcrumbs />
 
       <div className="w-full flex items-center">
-        <h3>Group Notes</h3>
+        <h3>Group Threads</h3>
       </div>
 
-      <GroupNotes />
+      <GroupThreads />
     </>
   );
 };

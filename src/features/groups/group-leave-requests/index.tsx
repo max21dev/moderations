@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useGroupLeaveRequests, useGroupMetadata } from 'nostr-hooks/nip29';
 
 import { Button } from '@/shared/components/ui/button';
 
@@ -7,16 +7,19 @@ import { CardContainer } from '@/shared/components/card-container';
 import { GroupSummary } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
 
-import { useGroupLeaveRequests, useGroupMetadata } from '@/shared/hooks';
+import { useActiveGroupId, useActiveRelay } from '@/shared/hooks';
 
 export const GroupLeaveRequests = () => {
-  const { groupId } = useParams();
+  const { activeRelay } = useActiveRelay();
+  const { activeGroupId } = useActiveGroupId();
 
-  const { metadata } = useGroupMetadata(groupId);
-  const { leaveRequests, hasMoreLeaveRequests, loadMoreLeaveRequests } =
-    useGroupLeaveRequests(groupId);
+  const { metadata } = useGroupMetadata(activeRelay, activeGroupId);
+  const { leaveRequests, hasMoreLeaveRequests, loadMoreLeaveRequests } = useGroupLeaveRequests(
+    activeRelay,
+    activeGroupId,
+  );
 
-  if (!groupId) return null;
+  if (!activeGroupId) return null;
 
   return (
     <>
@@ -24,20 +27,12 @@ export const GroupLeaveRequests = () => {
 
       <div className="flex flex-col gap-4">
         <CardContainer title={`Leave Requests`}>
-          {leaveRequests.length == 0 ? (
+          {leaveRequests?.length == 0 ? (
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
-            leaveRequests.length > 0 &&
-            leaveRequests.map((leaveRequest) => (
-              <div key={leaveRequest.pubkey}>
-                <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.pubkey}>
-                  {leaveRequest.reason && (
-                    <p className="p-2 text-xs text-muted-foreground">
-                      <b>Reason: </b>
-                      <span>{leaveRequest.reason}</span>
-                    </p>
-                  )}
-                </UserInfoRow>
+            (leaveRequests || []).map((leaveRequest) => (
+              <div key={leaveRequest.id}>
+                <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.id} />
               </div>
             ))
           )}

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useGroupJoinRequests, useGroupMetadata } from 'nostr-hooks/nip29';
 
 import { Button } from '@/shared/components/ui/button';
 
@@ -7,15 +7,19 @@ import { CardContainer } from '@/shared/components/card-container';
 import { GroupSummary } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
 
-import { useGroupJoinRequests, useGroupMetadata } from '@/shared/hooks';
+import { useActiveGroupId, useActiveRelay } from '@/shared/hooks';
 
 export const GroupJoinRequests = () => {
-  const { groupId } = useParams();
+  const { activeRelay } = useActiveRelay();
+  const { activeGroupId } = useActiveGroupId();
 
-  const { metadata } = useGroupMetadata(groupId);
-  const { joinRequests, hasMoreJoinRequests, loadMoreJoinRequests } = useGroupJoinRequests(groupId);
+  const { metadata } = useGroupMetadata(activeRelay, activeGroupId);
+  const { joinRequests, hasMoreJoinRequests, loadMoreJoinRequests } = useGroupJoinRequests(
+    activeRelay,
+    activeGroupId,
+  );
 
-  if (!groupId) return null;
+  if (!activeGroupId) return null;
 
   return (
     <>
@@ -23,13 +27,12 @@ export const GroupJoinRequests = () => {
 
       <div className="flex flex-col gap-4">
         <CardContainer title={`Join Requests`}>
-          {joinRequests.length == 0 ? (
+          {joinRequests?.length == 0 ? (
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
-            joinRequests.length > 0 &&
-            joinRequests.map((joinRequest) => (
-              <div key={joinRequest.pubkey}>
-                <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.pubkey}>
+            (joinRequests || []).map((joinRequest) => (
+              <div key={joinRequest.id}>
+                <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.id}>
                   {(joinRequest.reason || joinRequest.code) && (
                     <p className="p-2 text-xs text-muted-foreground">
                       {joinRequest.reason && (

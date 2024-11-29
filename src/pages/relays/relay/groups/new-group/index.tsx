@@ -1,24 +1,19 @@
-import { NDKKind, NDKPublishError } from '@nostr-dev-kit/ndk';
-import { useNewEvent } from 'nostr-hooks';
-import { useParams } from 'react-router-dom';
+import { NDKEvent, NDKKind, NDKPublishError } from '@nostr-dev-kit/ndk';
+import { Nip29GroupMetadata } from 'nostr-hooks/nip29';
 
 import { useToast } from '@/shared/components/ui/use-toast';
-
-import { useNip29Ndk } from '@/shared/hooks';
-import { GroupMetadata } from '@/shared/types';
 
 import { Breadcrumbs } from '@/features/breadcrumbs';
 import { GroupMetadataForm } from '@/features/groups';
 
+import { useActiveRelay } from '@/shared/hooks';
+
 export const NewGroupPage = () => {
   const { toast } = useToast();
 
-  const { relay } = useParams();
+  const { activeRelay } = useActiveRelay();
 
-  const { nip29Ndk } = useNip29Ndk();
-  const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
-
-  const onSubmit = ({ about, isOpen, isPublic, name, picture }: Omit<GroupMetadata, 'id'>) => {
+  const onSubmit = ({ about, isOpen, isPublic, name, picture }: Nip29GroupMetadata) => {
     // TODO: NIP-29 doesn't support creating groups yet
     toast({
       title: 'Error',
@@ -26,7 +21,7 @@ export const NewGroupPage = () => {
       variant: 'destructive',
       action: (
         <a
-          href={decodeURIComponent(relay || '')
+          href={decodeURIComponent(activeRelay || '')
             .replace('wss://', 'https://')
             .replace('ws://', 'http://')}
           target="_blank"
@@ -39,7 +34,7 @@ export const NewGroupPage = () => {
     });
     return;
 
-    const event = createNewEvent();
+    const event = new NDKEvent();
     event.kind = NDKKind.GroupAdminCreateGroup;
     event.tags = [
       ['name', name],

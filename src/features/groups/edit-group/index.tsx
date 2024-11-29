@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Nip29GroupMetadata, useGroupMetadata } from 'nostr-hooks/nip29';
 
 import { CardContainer } from '@/shared/components/card-container';
 import { Button } from '@/shared/components/ui/button';
@@ -13,21 +13,21 @@ import {
   DialogTrigger,
 } from '@/shared/components/ui/dialog';
 
-import { useGroupMetadata, useGroupModeration } from '@/shared/hooks';
-import { GroupMetadata } from '@/shared/types';
+import { useActiveGroupId, useActiveRelay, useGroupModeration } from '@/shared/hooks';
 
 import { GroupMetadataForm, GroupSummary } from '@/features/groups';
 
 export const EditGroup = () => {
-  const { groupId } = useParams();
+  const { activeRelay } = useActiveRelay();
+  const { activeGroupId } = useActiveGroupId();
 
-  const { metadata } = useGroupMetadata(groupId);
+  const { metadata } = useGroupMetadata(activeRelay, activeGroupId);
 
-  const { deleteGroup, updateMetadata } = useGroupModeration({ groupId });
+  const { handleDeleteGroup, handleEditMetadata } = useGroupModeration(activeRelay, activeGroupId);
 
-  const initialValues: Partial<GroupMetadata> = metadata || {};
+  const initialValues: Partial<Nip29GroupMetadata> = metadata || {};
 
-  if (!groupId || !metadata) return null;
+  if (!activeGroupId || !metadata) return null;
 
   return (
     <div className="flex flex-col gap-4 justify-center w-full">
@@ -36,7 +36,7 @@ export const EditGroup = () => {
       <CardContainer title="Group Metadata">
         <GroupMetadataForm
           submitLabel="Save Changes"
-          onSubmit={updateMetadata}
+          onSubmit={handleEditMetadata}
           initialValues={initialValues}
         />
       </CardContainer>
@@ -44,7 +44,7 @@ export const EditGroup = () => {
       <CardContainer title="Danger Zone">
         <div>
           <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button variant="destructive">Delete Group</Button>
             </DialogTrigger>
             <DialogContent>
@@ -57,7 +57,7 @@ export const EditGroup = () => {
                   <DialogClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DialogClose>
-                  <Button variant="destructive" onClick={deleteGroup}>
+                  <Button variant="destructive" onClick={handleDeleteGroup}>
                     Delete Group
                   </Button>
                 </DialogFooter>

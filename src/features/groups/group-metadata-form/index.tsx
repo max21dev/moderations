@@ -1,16 +1,15 @@
 import { EyeClosedIcon, EyeIcon, LockIcon, LockOpenIcon } from 'lucide-react';
+import { Nip29GroupMetadata } from 'nostr-hooks/nip29';
 import { useState } from 'react';
 
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
 
-import { GroupMetadata } from '@/shared/types';
-
 export type GroupMetadataFormProps = {
   submitLabel?: string | undefined;
-  onSubmit: (metadata: Omit<GroupMetadata, 'id'>) => void;
-  initialValues?: Partial<GroupMetadata>;
+  onSubmit: (metadata: Nip29GroupMetadata) => void;
+  initialValues?: Partial<Nip29GroupMetadata>;
 };
 
 export const GroupMetadataForm = ({

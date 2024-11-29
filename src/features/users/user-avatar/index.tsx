@@ -8,10 +8,10 @@ import {
 
 import { loader } from '@/shared/utils';
 
-import { useUserAvatar } from './hooks';
+import { useProfile } from 'nostr-hooks';
 
 export function UserAvatar({ pubkey }: { pubkey: string }) {
-  const { profile } = useUserAvatar({ pubkey });
+  const { profile } = useProfile({ pubkey });
 
   return (
     <TooltipProvider>

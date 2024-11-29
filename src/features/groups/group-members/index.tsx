@@ -1,32 +1,32 @@
-import { useParams } from 'react-router-dom';
+import { useGroupMembers, useGroupMetadata } from 'nostr-hooks/nip29';
 
 import { CardContainer } from '@/shared/components/card-container';
 
 import { GroupSummary } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
 
-import { useGroupMembers, useGroupMetadata } from '@/shared/hooks';
+import { useActiveGroupId, useActiveRelay } from '@/shared/hooks';
 
 export const GroupMembers = () => {
-  const { groupId } = useParams();
+  const { activeRelay } = useActiveRelay();
+  const { activeGroupId } = useActiveGroupId();
 
-  const { metadata } = useGroupMetadata(groupId);
-  const { members } = useGroupMembers(groupId);
+  const { metadata } = useGroupMetadata(activeRelay, activeGroupId);
+  const { members } = useGroupMembers(activeRelay, activeGroupId);
 
-  if (!groupId) return null;
+  if (!activeGroupId) return null;
 
   return (
     <>
       <GroupSummary metadata={metadata} />
 
       <div className="flex flex-col gap-4">
-        <CardContainer title={`Members (${members.length})`}>
-          {members.length == 0 ? (
+        <CardContainer title={`Members (${members?.length || 0})`}>
+          {members?.length == 0 ? (
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
-            members.length > 0 &&
-            members.map((member) => (
-              <UserInfoRow key={member.publicKey} pubkey={member.publicKey} />
+            (members || []).map((member) => (
+              <UserInfoRow key={member.pubkey} pubkey={member.pubkey} />
             ))
           )}
         </CardContainer>

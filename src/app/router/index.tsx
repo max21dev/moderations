@@ -105,7 +105,7 @@ const NewGroupEventPage = () =>
 const GroupEventPage = () => import('@/pages/relays/relay/groups/group/group-events/group-event');
 
 const GroupChatsPage = () => import('@/pages/relays/relay/groups/group/group-chats');
-const GroupNotesPage = () => import('@/pages/relays/relay/groups/group/group-notes');
+const GroupThreadsPage = () => import('@/pages/relays/relay/groups/group/group-threads');
 const GroupJoinRequestsPage = () => import('@/pages/relays/relay/groups/group/group-join-requests');
 const GroupLeaveRequestsPage = () =>
   import('@/pages/relays/relay/groups/group/group-leave-requests');
@@ -785,7 +785,7 @@ export const router = createBrowserRouter([
                         },
                       },
                       {
-                        path: 'group-notes',
+                        path: 'group-threads',
                         loader: ({ params }) => ({
                           crumbs: [
                             { label: 'Relays', to: '/relays' },
@@ -801,11 +801,11 @@ export const router = createBrowserRouter([
                               label: params.groupId,
                               to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
                             },
-                            { label: 'Group Notes' },
+                            { label: 'Group Threads' },
                           ],
                         }),
                         async lazy() {
-                          return { Component: (await GroupNotesPage()).GroupNotesPage };
+                          return { Component: (await GroupThreadsPage()).GroupThreadsPage };
                         },
                       },
                       {

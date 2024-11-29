@@ -1,10 +1,13 @@
+import { useNdk } from 'nostr-hooks';
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+
+import { Spinner } from '@/shared/components/spinner';
 
 import { Navbar } from '@/features/navbar';
 import { UserLoginModal } from '@/features/users';
 
-import { useGlobalNdk, useLoginModalState } from '@/shared/hooks';
+import { useLoginModalState } from '@/shared/hooks';
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -17,18 +20,18 @@ export const HomePage = () => {
 };
 
 export const HomeLayout = () => {
-  const { globalNdk } = useGlobalNdk();
+  const { ndk } = useNdk();
 
   const { setIsLoginModalOpen } = useLoginModalState();
 
   useEffect(() => {
     // Force user to login
-    setIsLoginModalOpen(!globalNdk.signer);
-  }, [globalNdk.signer, setIsLoginModalOpen]);
+    ndk && setIsLoginModalOpen(!ndk.signer);
+  }, [ndk, setIsLoginModalOpen]);
 
-  if (!globalNdk.signer) {
-    return <UserLoginModal />;
-  }
+  if (!ndk) return <Spinner />;
+
+  if (!ndk.signer) return <UserLoginModal />;
 
   return (
     <div className="w-full h-full">
