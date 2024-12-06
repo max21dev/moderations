@@ -28,7 +28,12 @@ export const GroupAdmins = () => {
           ) : (
             (admins || []).map((admin) => (
               <div className="flex items-center gap-2">
-                <UserInfoRow key={admin.pubkey} pubkey={admin.pubkey}>
+                <UserInfoRow
+                  key={admin.pubkey}
+                  relay={activeRelay}
+                  groupId={activeGroupId}
+                  pubkey={admin.pubkey}
+                >
                   <div className="flex gap-2 flex-wrap">
                     {admin.roles.map((role) => (
                       <Badge key={role} variant="outline" className="shrink-0">

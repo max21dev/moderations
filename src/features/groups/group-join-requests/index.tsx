@@ -31,28 +31,31 @@ export const GroupJoinRequests = () => {
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
             (joinRequests || []).map((joinRequest) => (
-              <div key={joinRequest.id}>
-                <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.id}>
-                  {(joinRequest.reason || joinRequest.code) && (
-                    <p className="p-2 text-xs text-muted-foreground">
-                      {joinRequest.reason && (
-                        <>
-                          <b>Reason: </b>
-                          <span>{joinRequest.reason}</span>
-                          <br />
-                        </>
-                      )}
+              <UserInfoRow
+                key={joinRequest.id}
+                relay={activeRelay}
+                groupId={activeGroupId}
+                pubkey={joinRequest.pubkey}
+              >
+                {(joinRequest.reason || joinRequest.code) && (
+                  <p className="p-2 text-xs text-muted-foreground">
+                    {joinRequest.reason && (
+                      <>
+                        <b>Reason: </b>
+                        <span>{joinRequest.reason}</span>
+                        <br />
+                      </>
+                    )}
 
-                      {joinRequest.code && (
-                        <>
-                          <b>Code: </b>
-                          <span>{joinRequest.code}</span>
-                        </>
-                      )}
-                    </p>
-                  )}
-                </UserInfoRow>
-              </div>
+                    {joinRequest.code && (
+                      <>
+                        <b>Code: </b>
+                        <span>{joinRequest.code}</span>
+                      </>
+                    )}
+                  </p>
+                )}
+              </UserInfoRow>
             ))
           )}
 

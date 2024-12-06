@@ -1,4 +1,4 @@
-import { useGroupLeaveRequests, useGroupMetadata } from 'nostr-hooks/nip29';
+import { useGroupMetadata, useGroupThreadComments } from 'nostr-hooks/nip29';
 
 import { Button } from '@/shared/components/ui/button';
 
@@ -9,12 +9,12 @@ import { UserInfoRow } from '@/features/users';
 
 import { useActiveGroupId, useActiveRelay } from '@/shared/hooks';
 
-export const GroupLeaveRequests = () => {
+export const GroupThreadComments = () => {
   const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroupId();
 
   const { metadata } = useGroupMetadata(activeRelay, activeGroupId);
-  const { leaveRequests, hasMoreLeaveRequests, loadMoreLeaveRequests } = useGroupLeaveRequests(
+  const { threadComments, hasMoreThreadComments, loadMoreThreadComments } = useGroupThreadComments(
     activeRelay,
     activeGroupId,
   );
@@ -26,25 +26,28 @@ export const GroupLeaveRequests = () => {
       <GroupSummary metadata={metadata} />
 
       <div className="flex flex-col gap-4">
-        <CardContainer title={`Leave Requests`}>
-          {leaveRequests?.length == 0 ? (
+        <CardContainer title={`Thread Comments`}>
+          {threadComments?.length == 0 ? (
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
-            (leaveRequests || []).map((leaveRequest) => (
+            (threadComments || []).map((threadComment) => (
               <UserInfoRow
-                key={leaveRequest.id}
+                key={threadComment.id}
                 relay={activeRelay}
                 groupId={activeGroupId}
-                pubkey={leaveRequest.pubkey}
-              />
+                pubkey={threadComment.pubkey}
+                openByDefault
+              >
+                <p className="truncate text-xs font-light">{threadComment.content}</p>
+              </UserInfoRow>
             ))
           )}
 
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => loadMoreLeaveRequests(50)}
-            disabled={!hasMoreLeaveRequests}
+            onClick={() => loadMoreThreadComments(50)}
+            disabled={!hasMoreThreadComments}
           >
             Load more
           </Button>

@@ -29,7 +29,13 @@ export const GroupChats = () => {
           ) : (
             (chats || []).map((chat) => (
               <div key={chat.id} className="flex items-center gap-2">
-                <UserInfoRow key={chat.id} pubkey={chat.pubkey} openByDefault>
+                <UserInfoRow
+                  key={chat.id}
+                  relay={activeRelay}
+                  groupId={activeGroupId}
+                  pubkey={chat.pubkey}
+                  openByDefault
+                >
                   <p className="truncate text-xs font-light">{chat.content}</p>
                 </UserInfoRow>
               </div>
