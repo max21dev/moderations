@@ -31,11 +31,15 @@ export const GroupThreadComments = () => {
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
             (threadComments || []).map((threadComment) => (
-              <div key={threadComment.id} className="flex items-center gap-2">
-                <UserInfoRow key={threadComment.id} pubkey={threadComment.pubkey} openByDefault>
-                  <p className="truncate text-xs font-light">{threadComment.content}</p>
-                </UserInfoRow>
-              </div>
+              <UserInfoRow
+                key={threadComment.id}
+                relay={activeRelay}
+                groupId={activeGroupId}
+                pubkey={threadComment.pubkey}
+                openByDefault
+              >
+                <p className="truncate text-xs font-light">{threadComment.content}</p>
+              </UserInfoRow>
             ))
           )}
 

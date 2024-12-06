@@ -82,7 +82,12 @@ export const GroupDetails = () => {
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
               admins?.slice(0, 5).map((admin) => (
-                <UserInfoRow key={admin.pubkey} pubkey={admin.pubkey}>
+                <UserInfoRow
+                  key={admin.pubkey}
+                  relay={activeRelay}
+                  groupId={activeGroupId}
+                  pubkey={admin.pubkey}
+                >
                   <div className="flex gap-2 flex-wrap w-full">
                     {admin.roles.map((role) => (
                       <Badge key={role} variant="outline" className="shrink-0">
@@ -114,7 +119,14 @@ export const GroupDetails = () => {
             ) : (
               members
                 ?.slice(0, 5)
-                .map((member) => <UserInfoRow pubkey={member.pubkey} key={member.pubkey} />)
+                .map((member) => (
+                  <UserInfoRow
+                    key={member.pubkey}
+                    relay={activeRelay}
+                    groupId={activeGroupId}
+                    pubkey={member.pubkey}
+                  />
+                ))
             )}
 
             {members && members.length > 5 && (
@@ -181,28 +193,31 @@ export const GroupDetails = () => {
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
               joinRequests?.slice(0, 5).map((joinRequest) => (
-                <div key={joinRequest.id}>
-                  <UserInfoRow pubkey={joinRequest.pubkey} key={joinRequest.id}>
-                    {(joinRequest.reason || joinRequest.code) && (
-                      <p className="p-2 text-xs text-muted-foreground">
-                        {joinRequest.reason && (
-                          <>
-                            <b>Reason: </b>
-                            <span>{joinRequest.reason}</span>
-                            <br />
-                          </>
-                        )}
+                <UserInfoRow
+                  key={joinRequest.id}
+                  relay={activeRelay}
+                  groupId={activeGroupId}
+                  pubkey={joinRequest.pubkey}
+                >
+                  {(joinRequest.reason || joinRequest.code) && (
+                    <p className="p-2 text-xs text-muted-foreground">
+                      {joinRequest.reason && (
+                        <>
+                          <b>Reason: </b>
+                          <span>{joinRequest.reason}</span>
+                          <br />
+                        </>
+                      )}
 
-                        {joinRequest.code && (
-                          <>
-                            <b>Code: </b>
-                            <span>{joinRequest.code}</span>
-                          </>
-                        )}
-                      </p>
-                    )}
-                  </UserInfoRow>
-                </div>
+                      {joinRequest.code && (
+                        <>
+                          <b>Code: </b>
+                          <span>{joinRequest.code}</span>
+                        </>
+                      )}
+                    </p>
+                  )}
+                </UserInfoRow>
               ))
             )}
 
@@ -224,11 +239,15 @@ export const GroupDetails = () => {
             {leaveRequests?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
             ) : (
-              leaveRequests?.slice(0, 5).map((leaveRequest) => (
-                <div key={leaveRequest.id}>
-                  <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.id} />
-                </div>
-              ))
+              leaveRequests
+                ?.slice(0, 5)
+                .map((leaveRequest) => (
+                  <UserInfoRow
+                    relay={activeRelay}
+                    groupId={activeGroupId}
+                    pubkey={leaveRequest.pubkey}
+                  />
+                ))
             )}
 
             {leaveRequests && leaveRequests.length > 5 && (

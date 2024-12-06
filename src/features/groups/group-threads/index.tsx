@@ -28,11 +28,15 @@ export const GroupThreads = () => {
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
             (threads || []).map((thread) => (
-              <div key={thread.id} className="flex items-center gap-2">
-                <UserInfoRow key={thread.id} pubkey={thread.pubkey} openByDefault>
-                  <p className="truncate text-xs font-light">{thread.content}</p>
-                </UserInfoRow>
-              </div>
+              <UserInfoRow
+                key={thread.id}
+                relay={activeRelay}
+                groupId={activeGroupId}
+                pubkey={thread.pubkey}
+                openByDefault
+              >
+                <p className="truncate text-xs font-light">{thread.content}</p>
+              </UserInfoRow>
             ))
           )}
 

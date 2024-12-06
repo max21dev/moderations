@@ -31,9 +31,12 @@ export const GroupLeaveRequests = () => {
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
             (leaveRequests || []).map((leaveRequest) => (
-              <div key={leaveRequest.id}>
-                <UserInfoRow pubkey={leaveRequest.pubkey} key={leaveRequest.id} />
-              </div>
+              <UserInfoRow
+                key={leaveRequest.id}
+                relay={activeRelay}
+                groupId={activeGroupId}
+                pubkey={leaveRequest.pubkey}
+              />
             ))
           )}
 
