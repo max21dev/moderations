@@ -47,6 +47,16 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
  * │   │   │   │   │   │   │   │   └── index.tsx
  * │   │   │   │   ├── group-chats/
  * │   │   │   │   │   ├── index.tsx
+ * │   │   │   │   ├── group-threads/
+ * │   │   │   │   │   ├── index.tsx
+ * │   │   │   │   ├── group-thread-comments/
+ * │   │   │   │   │   ├── index.tsx
+ * │   │   │   │   ├── group-join-requests/
+ * │   │   │   │   │   ├── index.tsx
+ * │   │   │   │   ├── group-leave-requests/
+ * │   │   │   │   │   ├── index.tsx
+ * │   │   │   │   ├── group-roles/
+ * │   │   │   │   │   ├── index.tsx
  * │   │   │   │   ├── group-events/
  * │   │   │   │   │   ├── index.tsx
  * │   │   │   │   │   ├── new-group-event/
@@ -105,10 +115,13 @@ const NewGroupEventPage = () =>
 const GroupEventPage = () => import('@/pages/relays/relay/groups/group/group-events/group-event');
 
 const GroupChatsPage = () => import('@/pages/relays/relay/groups/group/group-chats');
+const GroupThreadCommentsPage = () =>
+  import('@/pages/relays/relay/groups/group/group-thread-comments');
 const GroupThreadsPage = () => import('@/pages/relays/relay/groups/group/group-threads');
 const GroupJoinRequestsPage = () => import('@/pages/relays/relay/groups/group/group-join-requests');
 const GroupLeaveRequestsPage = () =>
   import('@/pages/relays/relay/groups/group/group-leave-requests');
+const GroupRolesPage = () => import('@/pages/relays/relay/groups/group/group-roles');
 
 export const router = createBrowserRouter([
   {
@@ -785,6 +798,32 @@ export const router = createBrowserRouter([
                         },
                       },
                       {
+                        path: 'group-thread-comments',
+                        loader: ({ params }) => ({
+                          crumbs: [
+                            { label: 'Relays', to: '/relays' },
+                            {
+                              label: params.relay,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                            },
+                            {
+                              label: 'Groups',
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                            },
+                            {
+                              label: params.groupId,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                            },
+                            { label: 'Group Thread Comments' },
+                          ],
+                        }),
+                        async lazy() {
+                          return {
+                            Component: (await GroupThreadCommentsPage()).GroupThreadCommentsPage,
+                          };
+                        },
+                      },
+                      {
                         path: 'group-threads',
                         loader: ({ params }) => ({
                           crumbs: [
@@ -857,6 +896,32 @@ export const router = createBrowserRouter([
                         async lazy() {
                           return {
                             Component: (await GroupLeaveRequestsPage()).GroupLeaveRequestsPage,
+                          };
+                        },
+                      },
+                      {
+                        path: 'group-roles',
+                        loader: ({ params }) => ({
+                          crumbs: [
+                            { label: 'Relays', to: '/relays' },
+                            {
+                              label: params.relay,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}`,
+                            },
+                            {
+                              label: 'Groups',
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups`,
+                            },
+                            {
+                              label: params.groupId,
+                              to: `/relays/${encodeURIComponent(params.relay || '')}/groups/${params.groupId}`,
+                            },
+                            { label: 'Group Roles' },
+                          ],
+                        }),
+                        async lazy() {
+                          return {
+                            Component: (await GroupRolesPage()).GroupRolesPage,
                           };
                         },
                       },
