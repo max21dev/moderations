@@ -1,4 +1,5 @@
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon, XIcon } from 'lucide-react';
+import { removeGroupUser } from 'nostr-hooks/nip29';
 import { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
@@ -15,10 +16,14 @@ import { cn, ellipsis, loader } from '@/shared/utils';
 import { useUserInfoRow } from './hooks';
 
 export function UserInfoRow({
+  relay,
+  groupId,
   pubkey,
   children,
   openByDefault,
 }: {
+  relay: string | undefined;
+  groupId: string | undefined;
   pubkey: string;
   children?: React.ReactNode;
   openByDefault?: boolean;
@@ -65,11 +70,20 @@ export function UserInfoRow({
           </span>
         </a>
 
+        <Button
+          variant="ghost"
+          size="icon"
+          className="ml-auto text-background group-hover:text-destructive"
+          onClick={() => relay && groupId && removeGroupUser({ relay, groupId, pubkey })}
+        >
+          <XIcon size={16} />
+        </Button>
+
         {children && (
           <Button
             variant="ghost"
             size="icon"
-            className="ml-auto rounded-full"
+            className="rounded-full"
             onClick={() => setIsDetailsOpen((prev) => !prev)}
           >
             <ChevronDownIcon
