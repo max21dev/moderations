@@ -26,7 +26,12 @@ export const GroupMembers = () => {
             <p className="text-muted-foreground text-xs">Empty List</p>
           ) : (
             (members || []).map((member) => (
-              <UserInfoRow key={member.pubkey} pubkey={member.pubkey} />
+              <UserInfoRow
+                key={member.pubkey}
+                relay={activeRelay}
+                groupId={activeGroupId}
+                pubkey={member.pubkey}
+              />
             ))
           )}
         </CardContainer>

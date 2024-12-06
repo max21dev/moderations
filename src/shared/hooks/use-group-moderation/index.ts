@@ -30,8 +30,10 @@ export const useGroupModeration = (relay: Nip29Relay, groupId: Nip29GroupId) => 
   };
 
   const handleDeleteGroup = () => {
-    groupId &&
+    relay &&
+      groupId &&
       deleteGroup({
+        relay,
         groupId,
         onError: () => {
           toastError({ message: 'Failed to delete group' });
@@ -43,8 +45,10 @@ export const useGroupModeration = (relay: Nip29Relay, groupId: Nip29GroupId) => 
   };
 
   const handleEditMetadata = (metadata: Nip29GroupMetadata) => {
-    groupId &&
+    relay &&
+      groupId &&
       editGroupMetadata({
+        relay,
         groupId,
         metadata: metadata,
         onError: () => {
