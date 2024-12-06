@@ -6,6 +6,8 @@ import {
   useGroupLeaveRequests,
   useGroupMembers,
   useGroupMetadata,
+  useGroupRoles,
+  useGroupThreadComments,
   useGroupThreads,
 } from 'nostr-hooks/nip29';
 import { Link } from 'react-router-dom';
@@ -34,8 +36,9 @@ export const GroupDetails = () => {
   const { members } = useGroupMembers(activeRelay, activeGroupId);
   const { metadata, metadataEvents } = useGroupMetadata(activeRelay, activeGroupId);
   // const { reactions} = useGroupReactions(activeRelay, activeGroupId);
-  // const { threadComments } = useGroupThreadComments(activeRelay, activeGroupId);
+  const { threadComments } = useGroupThreadComments(activeRelay, activeGroupId);
   const { threads } = useGroupThreads(activeRelay, activeGroupId);
+  const { roles } = useGroupRoles(activeRelay, activeGroupId);
 
   const host = getHostFromRelay(activeRelay);
 
@@ -124,9 +127,33 @@ export const GroupDetails = () => {
               </div>
             )}
           </CardContainer>
-        </div>
 
-        <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
+          <CardContainer title="Roles" linkTo={`${location.pathname}/group-roles`}>
+            {roles?.length == 0 ? (
+              <p className="text-muted-foreground text-xs">Empty List</p>
+            ) : (
+              roles?.slice(0, 5).map((role) => (
+                <div
+                  key={role.name}
+                  className="p-2 w-full rounded-lg border border-transparent hover:border-border transition-colors duration-500 ease-out"
+                >
+                  <b>{role.name}</b>
+                  <Muted>{role.description}</Muted>
+                </div>
+              ))
+            )}
+
+            {roles && roles.length > 5 && (
+              <div>
+                <Button variant="ghost" size="sm">
+                  <Link to={`${location.pathname}/group-roles`} className="flex">
+                    View All Roles <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
+          </CardContainer>
+
           <CardContainer title="Chats" linkTo={`${location.pathname}/group-chats`}>
             {chats?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
@@ -149,30 +176,6 @@ export const GroupDetails = () => {
             )}
           </CardContainer>
 
-          <CardContainer title="Threads" linkTo={`${location.pathname}/group-threads`}>
-            {threads?.length == 0 ? (
-              <p className="text-muted-foreground text-xs">Empty List</p>
-            ) : (
-              threads?.slice(0, 5).map((thread) => (
-                <div className="truncate" key={thread.id}>
-                  <Muted>{thread.content}</Muted>
-                </div>
-              ))
-            )}
-
-            {threads && threads.length > 5 && (
-              <div>
-                <Button variant="ghost" size="sm">
-                  <Link to={`${location.pathname}/group-threads`} className="flex">
-                    View All Threads <ArrowRightIcon className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
-              </div>
-            )}
-          </CardContainer>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 w-full h-full md:grid-cols-2">
           <CardContainer title="Join Requests" linkTo={`${location.pathname}/group-join-requests`}>
             {joinRequests?.length == 0 ? (
               <p className="text-muted-foreground text-xs">Empty List</p>
@@ -233,6 +236,53 @@ export const GroupDetails = () => {
                 <Button variant="ghost" size="sm">
                   <Link to={`${location.pathname}/group-leave-requests`} className="flex">
                     View All Leave Requests <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
+          </CardContainer>
+
+          <CardContainer title="Threads" linkTo={`${location.pathname}/group-threads`}>
+            {threads?.length == 0 ? (
+              <p className="text-muted-foreground text-xs">Empty List</p>
+            ) : (
+              threads?.slice(0, 5).map((thread) => (
+                <div className="truncate" key={thread.id}>
+                  <Muted>{thread.content}</Muted>
+                </div>
+              ))
+            )}
+
+            {threads && threads.length > 5 && (
+              <div>
+                <Button variant="ghost" size="sm">
+                  <Link to={`${location.pathname}/group-threads`} className="flex">
+                    View All Threads <ArrowRightIcon className="ml-2 w-4 h-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
+          </CardContainer>
+
+          <CardContainer
+            title="Thread Comments"
+            linkTo={`${location.pathname}/group-thread-comments`}
+          >
+            {threadComments?.length == 0 ? (
+              <p className="text-muted-foreground text-xs">Empty List</p>
+            ) : (
+              threadComments?.slice(0, 5).map((thread) => (
+                <div className="truncate" key={thread.id}>
+                  <Muted>{thread.content}</Muted>
+                </div>
+              ))
+            )}
+
+            {threadComments && threadComments.length > 5 && (
+              <div>
+                <Button variant="ghost" size="sm">
+                  <Link to={`${location.pathname}/group-thread-comments`} className="flex">
+                    View All Thread Comments <ArrowRightIcon className="ml-2 w-4 h-4" />
                   </Link>
                 </Button>
               </div>
