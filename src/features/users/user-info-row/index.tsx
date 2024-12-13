@@ -1,5 +1,4 @@
-import { ChevronDownIcon, XIcon } from 'lucide-react';
-import { removeGroupUser } from 'nostr-hooks/nip29';
+import { ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
@@ -14,6 +13,7 @@ import {
 import { cn, ellipsis, loader } from '@/shared/utils';
 
 import { useUserInfoRow } from './hooks';
+import { UserInfoRowShortcuts } from './user-info-row-shortcuts';
 
 export function UserInfoRow({
   relay,
@@ -70,14 +70,7 @@ export function UserInfoRow({
           </span>
         </a>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="ml-auto text-background group-hover:text-destructive"
-          onClick={() => relay && groupId && removeGroupUser({ relay, groupId, pubkey })}
-        >
-          <XIcon size={16} />
-        </Button>
+        <UserInfoRowShortcuts relay={relay} groupId={groupId} pubkey={pubkey} />
 
         {children && (
           <Button
