@@ -69,8 +69,6 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 const HomeLayout = () => import('@/pages');
 const HomePage = () => import('@/pages');
 
-const LogoutPage = () => import('@/pages/logout');
-
 const RelaysPage = () => import('@/pages/relays');
 const NewRelayPage = () => import('@/pages/relays/new-relay');
 const RelayLayout = () => import('@/pages/relays/relay');
@@ -934,11 +932,5 @@ export const router = createBrowserRouter([
         ],
       },
     ],
-  },
-  {
-    path: '/logout',
-    async lazy() {
-      return { Component: (await LogoutPage()).LogoutPage };
-    },
   },
 ]);
