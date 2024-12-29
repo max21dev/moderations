@@ -7,6 +7,7 @@ import {
   useGroupAdmins,
   useGroupRoles,
 } from 'nostr-hooks/nip29';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@/shared/components/ui/button';
 import { Checkbox } from '@/shared/components/ui/checkbox';
@@ -26,7 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
-import { useEffect, useState } from 'react';
+import { useToast } from '@/shared/components/ui/use-toast';
 
 export const UserInfoRowShortcuts = ({
   relay,
@@ -45,6 +46,23 @@ export const UserInfoRowShortcuts = ({
   const [isEditRolesDialogOpen, setIsEditRolesDialogOpen] = useState(false);
   const [isRemoveUserConfirmationDialogOpen, setIsRemoveUserConfirmationDialogOpen] =
     useState(false);
+
+  const { toast } = useToast();
+
+  const handleError = useCallback(() => {
+    toast({
+      title: 'Error',
+      description: 'An error occurred!',
+      variant: 'destructive',
+    });
+  }, [toast]);
+
+  const handleSuccess = useCallback(() => {
+    toast({
+      title: 'Success',
+      description: 'The operation was successful!',
+    });
+  }, [toast]);
 
   useEffect(() => {
     admins?.forEach((admin) => {
@@ -122,7 +140,18 @@ export const UserInfoRowShortcuts = ({
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button onClick={() => putGroupUser({ relay, groupId, pubkey, roles: selectedRoles })}>
+            <Button
+              onClick={() =>
+                putGroupUser({
+                  relay,
+                  groupId,
+                  pubkey,
+                  roles: selectedRoles,
+                  onError: handleError,
+                  onSuccess: handleSuccess,
+                })
+              }
+            >
               Assign Roles
             </Button>
           </DialogFooter>
@@ -145,7 +174,15 @@ export const UserInfoRowShortcuts = ({
             </DialogClose>
             <Button
               variant="destructive"
-              onClick={() => removeGroupUser({ relay, groupId, pubkey })}
+              onClick={() =>
+                removeGroupUser({
+                  relay,
+                  groupId,
+                  pubkey,
+                  onError: handleError,
+                  onSuccess: handleSuccess,
+                })
+              }
             >
               Remove User
             </Button>

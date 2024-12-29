@@ -1,5 +1,5 @@
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
-import { useActiveUser } from 'nostr-hooks';
+import { useActiveUser, useLogin } from 'nostr-hooks';
 
 import { Button } from '@/shared/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover';
@@ -11,6 +11,7 @@ import { UserAvatar } from '@/features/users';
 
 export const Navbar = () => {
   const { activeUser } = useActiveUser();
+  const { logout } = useLogin();
 
   return (
     <>
@@ -41,8 +42,8 @@ export const Navbar = () => {
                 </PopoverTrigger>
 
                 <PopoverContent align="end" className="max-w-48">
-                  <Button variant="ghost" className="w-full" asChild>
-                    <a href="/logout">Logout</a>
+                  <Button variant="ghost" className="w-full" onClick={logout}>
+                    Logout
                   </Button>
                 </PopoverContent>
               </Popover>
